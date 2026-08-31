@@ -89,7 +89,7 @@ class DQNOptimizer(BaseOptimizer):
         self.eps0, self.eps1 = 1.0, float(c.get("eps_min", 0.05))
         self.eps_decay = int(c.get("eps_decay_steps", 2000))
         self.batch = int(c.get("batch", 32))
-        self.buf_size = int(c.get("buf_size", 20000))
+        self.buf_size = int(c.get("buf_size", 5000))
         self.hidden = int(c.get("hidden", 64))
         self.d_embed = int(c.get("d_embed", 8))
         self.max_steps = int(c.get("max_steps", oracle.max_mut or 12))

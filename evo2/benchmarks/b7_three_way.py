@@ -150,10 +150,14 @@ def run_all(oracles, optimizers, budget, seeds, outdir, tag):
                 if oname2 == "wf" and oname in PROPOSALS:
                     cfg["proposal_table"] = PROPOSALS[oname]
                 if oname2 == "dqn":
-                    cfg["train_every"] = 2   # 每 2 环境步训练一次，控制全量耗时
+                    # train_every 2 → 6：numpy DQN 每步构造 [1060,42] 特征数组，
+                    # 4000 evals×5 seed 在 8GB 机器上碎片累积爆内存
+                    cfg["train_every"] = 6
                 opt = cls(orc2, seed=seed, budget=budget, cfg=cfg)
                 t0 = time.time()
                 res = opt.run()
+                import gc
+                gc.collect()          # 释放 numpy 碎片，防跨 seed 累积
                 fs.append(res["best_f"])
                 traces[f"{oname}|{oname2}|{seed}"] = res["trace"]
                 print(f"  {oname2:>4} seed={seed}: best={res['best_f']:.3f} "
@@ -207,6 +211,14 @@ def main():
         REBUILD["ppri_cal"] = lambda: PprICalibratedOracle(
             G, wt53, gb1_proto, seed=11)
         PROPOSALS["ppri_cal"] = G
+
+    # 跨蛋白 DL 代理（ProteinGym 训练，PprI 零样本）—— 本机资产，需模型文件
+    try:
+        from engine.surrogate_oracle import build_ppri_surrogate
+        REBUILD["surrogate_ppri"] = lambda: build_ppri_surrogate()
+        print("[ok] surrogate_ppri (ProteinGym DL 代理) 可用")
+    except Exception as e:  # noqa
+        print(f"[warn] surrogate_ppri 不可用: {e}")
     keys = list(REBUILD) if which is None else [k for k in which if k in REBUILD]
     oracles = {k: REBUILD[k]() for k in keys}
 
