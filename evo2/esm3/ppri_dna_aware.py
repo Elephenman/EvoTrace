@@ -54,14 +54,34 @@ def _lock_score(aa_idx):
     return 0.0
 
 
+# ---- Boltz-2 标签校准的经验偏好表（2026-08-31, 240 models, 六候选×24nt 靶/非靶）----
+# 实测结论（见 results/gate_calibration.csv）:
+#   读头 F88 : K(双锁 .85/.45/.35) >> F=WT(.20) >> R(.00, 反向设计 F88R 摧毁读头几何)
+#   Y217     : Y 保留芳香为佳；R 与反向设计共现且双锁为 0
+#   M255     : M(天然) > I(s13_c1, .35) >> K(.00)
+#   锚点     : 降低 Patch1 正电荷(R85G/R207K) 显著提升判别 Δiface — 与 v1 的"必须为 R"相反
+# ⚠ 混杂警告: n=6 设计且位点突变共现(F88R+Y217R+M255K 总是一起出现),
+#   下表为 in-sample 拟合(Spearman v2 vs dual_S1 = +0.824), 泛化性待去混杂扫描验证。
+READ_PREF = {'K': 1.00, 'W': 0.50, 'Y': 0.55, 'F': 0.30, 'Q': 0.20, 'A': -0.20, 'R': -1.00}
+Y217_PREF = {'Y': 1.00, 'F': 0.50, 'W': 0.50, 'A': -0.20, 'K': -0.40, 'R': -0.60}
+M255_PREF = {'M': 1.00, 'I': 0.60, 'L': 0.50, 'A': -0.20, 'R': -0.80, 'K': -1.00}
+ANCHOR_CHARGE = {'R': 1.0, 'K': 0.70, 'H': 0.30}
+
+
 class DnaAwareLandscape:
-    """组合景观：ESM3 稳定性 z + 机制门控的靶标匹配项。"""
+    """组合景观：ESM3 稳定性 z + 机制门控的靶标匹配项。
+
+    gate_version:
+        "v1" —— 解析式启发（芳香读头 / 正电双锁 / 锚点必 R）。
+                已由 Boltz 证伪: Spearman vs 实测双锁率 = −0.588（反相关），仅作对照保留。
+        "v2" —— Boltz-2 标签校准（默认）。Spearman vs 双锁率 +0.824 / vs Δiface +0.928。
+    """
 
     def __init__(self, base_oracle,
                  dna_on="TCATGAGCAGTTTTTTGTTTTTTT",
                  dna_off="TTGCTATTTTTTATTGCTTTGAGT",
                  target_read_base='G', off_read_base='T',
-                 w_base=0.5, w_gate=0.5):
+                 w_base=0.5, w_gate=0.5, gate_version="v2"):
         self.base = base_oracle
         self.L = base_oracle.L
         self.wt_idx = base_oracle.wt_idx
@@ -72,6 +92,7 @@ class DnaAwareLandscape:
         self.off_read_base = off_read_base
         self.w_base = w_base
         self.w_gate = w_gate
+        self.gate_version = gate_version
         self.max_mut = getattr(base_oracle, 'max_mut', 12)
 
         # seq_idx -> 列索引
@@ -85,6 +106,12 @@ class DnaAwareLandscape:
 
     # ---- 机制门控 ----
     def _gate(self, geno):
+        """按 gate_version 分派。v2 为 Boltz 校准版本（默认）。"""
+        if self.gate_version == "v1":
+            return self._gate_v1(geno)
+        return self._gate_v2(geno)
+
+    def _gate_v1(self, geno):
         geno = np.asarray(geno, dtype=np.int64)
         # 读头特异性：对靶标 G 的偏好 − 对非靶 T 的偏好
         read = 0.0
@@ -100,6 +127,27 @@ class DnaAwareLandscape:
                            for c in self._anchor_cols])
                   if self._anchor_cols else 0.0)
         return 0.4 * read + 0.3 * lock + 0.3 * anchor
+
+    def _gate_v2(self, geno):
+        """Boltz-2 校准门控:
+
+            gate = 0.40*读头(88) + 0.20*Y217 + 0.20*M255 − 0.20*锚点平均电荷
+
+        末项为"非特异磷酸锚定惩罚"——降低 Patch1 正电荷可显著减少非靶结合
+        （实测 s13_c1 R85G / TrackF_r1 R207K 的 Δiface 分别为 +10.5 / +12.9，
+          均远高于 WT 的 +3.5）。
+        """
+        geno = np.asarray(geno, dtype=np.int64)
+
+        def aa_at(pdb):
+            c = self.seqidx_to_col.get(pdb - 22)
+            return AA[int(geno[c])] if c is not None else None
+
+        read = READ_PREF.get(aa_at(READHEAD_PDB), 0.0)
+        y217 = Y217_PREF.get(aa_at(217), 0.0)
+        m255 = M255_PREF.get(aa_at(255), 0.0)
+        charge = sum(ANCHOR_CHARGE.get(aa_at(p), 0.0) for p in ANCHOR_PDB) / float(len(ANCHOR_PDB))
+        return 0.40 * read + 0.20 * y217 + 0.20 * m255 - 0.20 * charge
 
     # ---- 组合适应度 ----
     def evaluate(self, genos):
