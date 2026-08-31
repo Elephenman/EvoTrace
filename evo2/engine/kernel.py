@@ -20,7 +20,8 @@ class WFKernel:
     """Wright-Fisher 内核。sites: 可变位点 0-based 列表；priors: {site: {aa: p}}。"""
 
     def __init__(self, wt_seq, sites, priors, config, seed=0,
-                 anchor_sites=None, measured_keys=None, proposal="prior"):
+                 anchor_sites=None, measured_keys=None, proposal="prior",
+                 evoprior=None, alpha=0.5):
         self.wt = wt_seq
         self.cfg = config
         self.rng = np.random.default_rng(seed)
@@ -28,6 +29,10 @@ class WFKernel:
         self.L = len(self.sites)
         self.n_aa = 20
         self.proposal_mode = proposal
+        # ---- EvoPrior 融合（v3 草案）：p_final = α·p_chem + (1−α)·p_evo ----
+        # evoprior: [L_full, 20] 进化先验（None 表示不融合，退化为 v2 纯化学先验）
+        self.evoprior = evoprior
+        self.alpha = float(alpha)
         self.wt_idx = np.array([AA2IDX[wt_seq[i]] for i in self.sites], dtype=int)
         self.prior_table = self._build_prior_table(priors)
         self._refresh_sel()
@@ -69,6 +74,14 @@ class WFKernel:
             if tab[j, self.wt_idx[j]] < 1e-3:
                 tab[j, self.wt_idx[j]] = 1e-3
         tab /= tab.sum(axis=1, keepdims=True)
+        # ---- EvoPrior 融合（v3 草案）：仅在调用方显式传入 evoprior 时生效 ----
+        if self.evoprior is not None:
+            evo = np.asarray(self.evoprior, float)[np.asarray(self.sites)]
+            evo = np.clip(evo, 1e-6, None)
+            evo /= evo.sum(axis=1, keepdims=True)
+            fused = self.alpha * tab + (1.0 - self.alpha) * evo
+            fused = np.clip(fused, 1e-6, None)
+            tab = fused / fused.sum(axis=1, keepdims=True)
         return tab
 
     def _refresh_sel(self):
