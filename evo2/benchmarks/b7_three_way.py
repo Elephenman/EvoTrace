@@ -107,7 +107,6 @@ def discover_optimizers():
     try:
         import engine.esopt as E  # noqa
         opts["es"] = E.OpenAIESOptimizer
-        opts["cem"] = R  # placeholder, fixed below
         opts["cem"] = E.CEMOptimizer
     except ImportError:
         pass
