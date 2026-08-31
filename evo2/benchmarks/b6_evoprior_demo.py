@@ -15,6 +15,9 @@
   --plm_model      facebook/esm2_t33_650M_UR50D
   --embed_cache    嵌入缓存 .npy（避免重复推理）
   --alpha          固定融合权重；默认做交叉验证学习
+  --per_site       逐位点自适应 α（EVOPRIOR §6③）：每位点独立学 α_j，
+                   盲点位（化学先验被手工规则盲化）α_j→0 更信 p_evo，
+                   化学先验可靠的位点 α_j→1；避免全局单一 α 的妥协。
   --seq_offset     PDB 编号 = seq_idx + offset（PprI 8SLN 通常为 0 或 1）
   --chain         蛋白链（默认 A）
   --out           输出目录（默认 evo2/results/evoprior）
@@ -70,6 +73,7 @@ def main():
     ap.add_argument("--plm_model", default="esm2_t33_650M_UR50D")
     ap.add_argument("--embed_cache", default=None)
     ap.add_argument("--alpha", type=float, default=None)
+    ap.add_argument("--per_site", action="store_true")
     ap.add_argument("--seq_offset", type=int, default=0)
     ap.add_argument("--chain", default="A")
     ap.add_argument("--out", default=None)
@@ -113,8 +117,13 @@ def main():
     if args.alpha is not None:
         alpha = args.alpha
         curve = None
+        per_site = False
+    elif args.per_site:
+        alpha, curve = learn_alpha_cv(p_chem, p_evo, pssm, folds=5, per_site=True)
+        per_site = True
     else:
         alpha, curve = learn_alpha_cv(p_chem, p_evo, pssm, folds=5)
+        per_site = False
     p_final = fuse_tables(p_chem, p_evo, alpha)
 
     # ---- 输出 ----
@@ -134,7 +143,15 @@ def main():
     with open(rep, "w") as f:
         f.write("EvoPrior 报告（规则驱动 vs 数据驱动）\n")
         f.write(f"seq_len={L}  p_chem 来源={src}  use_plm={args.use_plm}\n")
-        f.write(f"融合 α={alpha:.3f}\n\n")
+        if per_site:
+            f.write(f"融合 α=逐位点自适应 [L] 数组（min={alpha.min():.3f} "
+                    f"max={alpha.max():.3f} mean={alpha.mean():.3f}）\n")
+            # 导出 α 数组供 kernel 直接复用
+            np.savetxt(os.path.join(out, "evoprior_alpha_per_site.csv"),
+                       alpha.reshape(-1, 1), delimiter=",",
+                       header="alpha_per_site", comments="")
+        else:
+            f.write(f"融合 α={alpha:.3f}\n")
         # 盲点诊断：化学先验与进化先验冲突最大的位点
         div = (p_chem * np.log((p_chem + 1e-8) / (p_evo + 1e-8))).sum(1)
         worst = int(np.argmax(div))

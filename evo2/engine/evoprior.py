@@ -244,13 +244,19 @@ class EvoPriorMLP:
 # 4. 融合层（M2）+ α 交叉验证
 # ======================================================================
 def fuse_tables(p_chem, p_evo, alpha=0.5):
-    """p_chem, p_evo: [L,20]（每行已归一的分布）。
+    """融合 p_chem 与 p_evo。
 
-    返回 p_final = normalize(α·p_chem + (1−α)·p_evo)。
+    p_chem, p_evo: [L,20]（每行已归一的分布）。
+    alpha: 标量（全局权重）或 [L] 数组（逐位点自适应权重）。
+    返回 p_final = normalize(α·p_chem + (1−α)·p_evo)，每行归一。
     """
     p_chem = np.asarray(p_chem, float)
     p_evo = np.asarray(p_evo, float)
-    fused = alpha * p_chem + (1.0 - alpha) * p_evo
+    a = np.asarray(alpha, float)
+    if a.ndim == 0:
+        a = a * np.ones(p_chem.shape[0])
+    a = a.reshape(-1, 1)  # [L,1]
+    fused = a * p_chem + (1.0 - a) * p_evo
     fused = np.clip(fused, 1e-6, None)
     return fused / fused.sum(axis=1, keepdims=True)
 
@@ -260,12 +266,45 @@ def _kl_rows(p_true, p_pred):
     return np.sum(p_true * (np.log(p_true + eps) - np.log(p_pred + eps)), axis=1)
 
 
-def learn_alpha_cv(p_chem, p_evo, pssm, folds=5, alphas=None):
-    """在融合层做 k 折 CV：对每折的验证位点，选 α 最小化 KL(p_ssm ∥ p_final)。
+def _js_div(p, q):
+    """Jensen-Shannon 分歧（nats，∈ [0, log2]）。衡量两分布的对称相似度。"""
+    p = np.clip(np.asarray(p, float), 1e-8, None)
+    q = np.clip(np.asarray(q, float), 1e-8, None)
+    p /= p.sum()
+    q /= q.sum()
+    m = 0.5 * (p + q)
+    kl_pm = np.sum(p * (np.log(p) - np.log(m)))
+    return 0.5 * kl_pm + 0.5 * np.sum(q * (np.log(q) - np.log(m)))
 
-    返回最优 α（所有折平均 KL 最小者）与 (α, mean_KL) 表。
-    注：此处 CV 只调融合权重，不重训 MLP——MLP 已在全量 PSSM 上训练。
+
+def learn_alpha_cv(p_chem, p_evo, pssm, folds=5, alphas=None, per_site=False):
+    """融合层 α 交叉验证。
+
+    全局模式(per_site=False)：k 折 CV 在验证位点上选标量 α 最小化
+        mean KL(p_ssm ∥ p_final)，返回 (最优 α, (α, mean_KL) 表)。
+    逐位点模式(per_site=True)：返回 [L] 的 α 数组，每位点
+        α_j = 1 − d_j，其中 d_j = JS(p_chem_j, p_evo_j)/log2 ∈ [0,1] 为
+        化学先验与进化先验在该位的局部分歧：
+          · 规则与数据一致(d_j→0) → α_j→1，保留化学先验（"化学先验强"）
+          · 规则被盲化、与数据冲突(d_j→1，即盲点) → α_j→0，转信进化先验（"进化信号强"）
+    设计要点
+    --------
+    - 不直接用 p_ssm_j 逐位拟合（避免 p_evo≈pssm 时 α→0 退化的过拟合）；
+      仅以 p_chem_j 与 p_evo_j 的分歧为信号，符合"规则驱动 vs 数据驱动"
+      的定性对比，且不依赖 PLM。
+    - 不依赖 k 折 CV（避免 L=1 单点时训练集为空的退化）。
+    注：CV 只调融合权重，不重训 MLP——MLP 已在全量 PSSM 上训练。
     """
+    if per_site:
+        p_chem = np.asarray(p_chem, float)
+        p_evo = np.asarray(p_evo, float)
+        L = p_chem.shape[0]
+        log2 = math.log(2.0)
+        alpha_arr = np.zeros(L)
+        for j in range(L):
+            d = _js_div(p_chem[j], p_evo[j]) / log2
+            alpha_arr[j] = 1.0 - min(max(float(d), 0.0), 1.0)
+        return alpha_arr, None
     if alphas is None:
         alphas = np.round(np.linspace(0.0, 1.0, 21), 2)
     p_chem = np.asarray(p_chem, float)
@@ -281,7 +320,7 @@ def learn_alpha_cv(p_chem, p_evo, pssm, folds=5, alphas=None):
         val = splits[fl]
         tr = np.concatenate([splits[k] for k in range(folds) if k != fl])
         # 用训练位点的 pssm 反推"最佳 α"：在训练集上最小化 KL(p_ssm ∥ p_final)
-        best_a, best_kl = None, 1e9
+        best_a, best_kl = 0.5, 1e9
         for a in alphas:
             pf = fuse_tables(p_chem[tr], p_evo[tr], a)
             kl = _kl_rows(pssm[tr], pf).mean()

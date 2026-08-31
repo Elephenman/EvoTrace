@@ -32,7 +32,9 @@ class WFKernel:
         # ---- EvoPrior 融合（v3 草案）：p_final = α·p_chem + (1−α)·p_evo ----
         # evoprior: [L_full, 20] 进化先验（None 表示不融合，退化为 v2 纯化学先验）
         self.evoprior = evoprior
-        self.alpha = float(alpha)
+        # alpha 支持标量（全局权重）或 [L] 数组（逐位点自适应权重，EVOPRIOR §6③）。
+        # 用 asarray 统一为 numpy，标量→0-d、数组→[L]，二者均可与 [L,20] 表广播。
+        self.alpha = np.asarray(alpha, float)
         self.wt_idx = np.array([AA2IDX[wt_seq[i]] for i in self.sites], dtype=int)
         self.prior_table = self._build_prior_table(priors)
         self._refresh_sel()
@@ -79,7 +81,15 @@ class WFKernel:
             evo = np.asarray(self.evoprior, float)[np.asarray(self.sites)]
             evo = np.clip(evo, 1e-6, None)
             evo /= evo.sum(axis=1, keepdims=True)
-            fused = self.alpha * tab + (1.0 - self.alpha) * evo
+            # α 支持标量（全局）或 [L] 数组（逐位点自适应）。
+            # 注意：numpy 不广播 (L,)×(L,20)，须 reshape 到 (L,1)；
+            # 且 kernel 仅对可变位点 self.sites 融合，数组 α 须同步按 sites 索引。
+            a = np.asarray(self.alpha, float)
+            if a.ndim == 0 or a.size == 1:
+                a = float(a)                       # 标量：直接广播
+            else:
+                a = a[np.asarray(self.sites)].reshape(-1, 1)  # [self.L, 1]
+            fused = a * tab + (1.0 - a) * evo
             fused = np.clip(fused, 1e-6, None)
             tab = fused / fused.sum(axis=1, keepdims=True)
         return tab

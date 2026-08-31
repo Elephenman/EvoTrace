@@ -64,15 +64,10 @@ def pchem_blinded(seq):
         for aa, w in {"M": 0.85, "F": 0.9, "L": 1.0, "I": 1.0, "V": 0.95}.items():
             tab[i, AA2IDX[aa]] = max(tab[i, AA2IDX[aa]], w)
         tab[i, AA2IDX[seq[i]]] = max(tab[i, AA2IDX[seq[i]]], 0.4)
-    # 135 位盲点：H 高、疏水压低（模拟手工规则 M135H 的错误先验）
+    # 135 位盲点：纯 H（模拟手工规则 M135H 把疏水位错误改写为极性 H）
     i = 135
-    tab[i] = 0.05
-    tab[i, AA2IDX["H"]] = 0.9
-    tab[i, AA2IDX["R"]] = 0.3
-    tab[i, AA2IDX["K"]] = 0.3
-    tab[i, AA2IDX["M"]] = 0.1
-    tab[i, AA2IDX["F"]] = 0.1
-    tab[i, AA2IDX["L"]] = 0.1
+    tab[i] = 1e-3
+    tab[i, AA2IDX["H"]] = 1.0
     tab = np.clip(tab, 1e-3, None)
     return tab / tab.sum(axis=1, keepdims=True)
 
@@ -142,6 +137,57 @@ def _kl_at(pssm, p_chem, p_evo, alpha, site):
     return float(np.sum(pssm[site] * (np.log(pssm[site] + eps) - np.log(pf + eps))))
 
 
+def test_per_site_alpha():
+    """逐位点自适应 α（EVOPRIOR §6③）：盲点位 α→0，可靠位 α 更高。
+
+    当某位化学先验被手工规则盲化（如 135 位 M135H），而 p_evo=PSSM 与之冲突时，
+    逐位点 CV 应让该位 α_j→0（完全信任数据驱动先验）；化学先验本就正确的位点
+    α_j 不必强制为 0。这避免了全局单一 α 在非保守位与盲点位间强行妥协。
+    """
+    seq = synth_seq()
+    msa = synth_msa(seq)
+    with tempfile.NamedTemporaryFile("w", suffix=".a3m", delete=False) as f:
+        f.write(">query\n" + seq + "\n")
+        for r in msa[1:]:
+            f.write(">hit\n" + r + "\n")
+        a3m_path = f.name
+    try:
+        _, seqs = read_a3m(a3m_path)
+        pssm = msa_to_pssm(seqs, seq, pseudocount=1.0)
+        p_evo = pssm.copy()          # 数据驱动真值
+        p_chem = pchem_blinded(seq)  # 含 135 位 M135H 盲点
+
+        alpha_global, _ = learn_alpha_cv(p_chem, p_evo, pssm, folds=4)
+        alpha_arr, _ = learn_alpha_cv(p_chem, p_evo, pssm, folds=4, per_site=True)
+
+        # 形状正确
+        assert alpha_arr.shape == (len(seq),), \
+            f"per_site α 形状应为 [L]，得到 {alpha_arr.shape}"
+        # 盲点位 135：p_chem 纯 H（错）、p_evo 疏水（对）→ 局部分歧 d=1 → α_135=0
+        assert alpha_arr[135] < 0.25, \
+            f"盲点位 135 的 α 应接近 0，得到 {alpha_arr[135]:.3f}"
+        # 可靠位点（如 0，规则与数据一致）α 应显著高于盲位（体现"可靠→高"）
+        assert alpha_arr[0] > alpha_arr[135] + 0.2, \
+            f"可靠位 α({alpha_arr[0]:.3f}) 应显著高于盲位 α({alpha_arr[135]:.3f})"
+        # 逐位点融合修复盲点：135 位因 α_135≈0 而 p_final 以 p_evo 为主（疏水恢复）
+        pf = fuse_tables(p_chem, p_evo, alpha_arr)
+        hyd_per = pf[135, HYD].sum()
+        hyd_evo = p_evo[135, HYD].sum()
+        assert hyd_per > p_chem[135, HYD].sum(), "逐位点 α 未修复盲点"
+        assert hyd_per > 0.6, \
+            f"盲点位疏水应被恢复(>0.6)，得到 {hyd_per:.3f}"
+        assert abs(hyd_per - hyd_evo) < 0.12, \
+            f"逐位点 α 在盲点位应≈p_evo，疏水 {hyd_per:.3f} vs {hyd_evo:.3f}"
+
+        print(f"[OK] 逐位点 α: 形状={alpha_arr.shape}  "
+              f"盲位α135={alpha_arr[135]:.3f}  可靠位α0={alpha_arr[0]:.3f}  "
+              f"全局α={alpha_global:.3f}\n"
+              f"     135位融合疏水(逐位点)={hyd_per:.3f} vs p_evo={hyd_evo:.3f}（一致）")
+    finally:
+        os.unlink(a3m_path)
+
+
 if __name__ == "__main__":
     test_pipeline()
+    test_per_site_alpha()
     print("\nALL EVO-PRIOR TESTS PASSED")
