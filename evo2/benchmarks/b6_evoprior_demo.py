@@ -72,6 +72,21 @@ def main():
     ap.add_argument("--use_plm", action="store_true")
     ap.add_argument("--plm_model", default="esm2_t33_650M_UR50D")
     ap.add_argument("--embed_cache", default=None)
+    ap.add_argument("--embed_npz", default=None,
+                    help="集群预计算 PLM 嵌入 npz（cluster/esm3_embed_cluster.py 产物）")
+    ap.add_argument("--embed_key", default=None, help="npz 内的序列 key（单条目时可省）")
+    ap.add_argument("--pca_dim", type=int, default=32,
+                    help="PCA 降维维度（ESM3 为 1536 维，必须降维）；0=不降维")
+    ap.add_argument("--no_cv", action="store_true",
+                    help="关闭留出位点交叉验证（关闭后 p_evo 来自全量拟合，有过拟合风险）")
+    ap.add_argument("--p_evo_source", default="auto",
+                    choices=("auto", "pssm", "mlp"),
+                    help="p_evo 来源：auto=PSSM 为主+MLP 补低覆盖列（默认）；"
+                         "pssm=纯 PSSM；mlp=纯 MLP 留出预测")
+    ap.add_argument("--min_neff", type=float, default=30.0,
+                    help="auto 模式下判定 MSA 覆盖不足的列深度阈值")
+    ap.add_argument("--w_decay", type=float, default=1e-2,
+                    help="MLP 权重衰减（单蛋白小样本下影响显著）")
     ap.add_argument("--alpha", type=float, default=None)
     ap.add_argument("--per_site", action="store_true")
     ap.add_argument("--seq_offset", type=int, default=0)
@@ -105,10 +120,15 @@ def main():
         raise SystemExit("必须提供 --pdb 或 --priors_csv 以生成化学先验 p_chem")
 
     # ---- p_evo ----
-    print(f"[B6] 训练 EvoPrior（use_plm={args.use_plm}）...")
+    print(f"[B6] 训练 EvoPrior（embed_npz={args.embed_npz or '无'}，"
+          f"use_plm={args.use_plm}）...")
     evo = build_evoprior(
         seq, args.msa, use_plm=args.use_plm, plm_model=args.plm_model,
-        embed_cache=args.embed_cache, verbose=True,
+        embed_cache=args.embed_cache,
+        embed_npz=args.embed_npz, embed_key=args.embed_key,
+        pca_dim=args.pca_dim, cv_eval=not args.no_cv,
+        w_decay=args.w_decay, p_evo_source=args.p_evo_source,
+        min_neff=args.min_neff, verbose=True,
     )
     p_evo = evo["p_evo"]
     pssm = evo["pssm"]
@@ -142,7 +162,29 @@ def main():
     rep = os.path.join(out, "evoprior_report.txt")
     with open(rep, "w") as f:
         f.write("EvoPrior 报告（规则驱动 vs 数据驱动）\n")
-        f.write(f"seq_len={L}  p_chem 来源={src}  use_plm={args.use_plm}\n")
+        f.write(f"seq_len={L}  p_chem 来源={src}\n")
+        f.write(f"嵌入来源={evo['embed_source']}  use_plm={args.use_plm}\n")
+        if evo.get("pca"):
+            p = evo["pca"]
+            f.write(f"PCA: {p['in_dim']} → {p['dim']} 维"
+                    f"（解释方差 {p['explained_var']:.3f}）\n")
+        cv = evo.get("cv")
+        if cv:
+            f.write("\n[诚实性评估] 位点 %d 折留出交叉熵（越低越好）\n" % cv["folds"])
+            f.write(f"  MLP（嵌入特征）        CE={cv['mlp_ce']:.4f}\n")
+            f.write(f"  基线1 全局氨基酸组成   CE={cv['comp_ce']:.4f}\n")
+            if "wtcond_ce" in cv:
+                f.write(f"  基线2 WT 查表（无嵌入）CE={cv['wtcond_ce']:.4f}\n")
+                f.write(f"  Δ(基线1−MLP) = {cv['delta_ce']:+.4f}   "
+                        f"Δ(基线2−MLP) = {cv['delta_wt_ce']:+.4f}\n")
+                f.write("  判读：MLP 优于基线1 说明嵌入携带位点信息；"
+                        "优于基线2 才说明嵌入带来**超出 WT 身份**的增量。\n")
+            f.write(f"  PSSM 平均熵（记忆下界）="
+                    f"{-np.mean(np.sum(pssm*np.log(np.clip(pssm,1e-9,None)),axis=1)):.4f}\n")
+        f.write(f"\np_evo 来源={evo.get('embed_source')} / mode={args.p_evo_source}  "
+                f"MSA 列深度中位数={np.median(evo['neff']):.0f}  "
+                f"低覆盖列={int(evo['low_cov'].sum())}/{L}\n")
+        f.write("\n")
         if per_site:
             f.write(f"融合 α=逐位点自适应 [L] 数组（min={alpha.min():.3f} "
                     f"max={alpha.max():.3f} mean={alpha.mean():.3f}）\n")

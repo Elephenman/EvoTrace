@@ -12,6 +12,7 @@
 
 运行：python evo2/engine/tests/test_evoprior.py
 """
+import math
 import os
 import sys
 import tempfile
@@ -187,7 +188,51 @@ def test_per_site_alpha():
         os.unlink(a3m_path)
 
 
+def test_read_a3m_preserves_gaps():
+    """回归测试：a3m 的 '-'（对齐缺失列）必须保留，只剔除小写插入列。
+
+    历史 bug（影响极大且静默）：read_a3m 曾用 `c.isupper()` 过滤，把 '-'
+    一并删除 → 同源序列被"压缩"、列整体错位、长度不再等于 query 长度 →
+    msa_to_pssm 因 `len(s) != L` 静默跳过几乎所有行（seen=1，只剩 query
+    自身）→ PSSM 退化为"query one-hot + 伪计数"，几乎不含进化信息
+    （PprI 实测平均熵 2.978，仅比均匀分布 2.996 低 0.017）。
+
+    本测试用含 gap + 小写插入的合成 a3m 锁住该行为。
+    """
+    # query 5 列；两条同源序列各含 gap('-') 与小写插入列
+    a3m = ">query\nACDEF\n>h1\nACde-EF\n>h2\n-CklDklEF\n"
+    with tempfile.NamedTemporaryFile("w", suffix=".a3m", delete=False) as f:
+        f.write(a3m)
+        path = f.name
+    try:
+        query, seqs = read_a3m(path)
+        # 注意：read_a3m 的 seqs 含 query 行本身，故 seqs[0] == query
+        assert query == "ACDEF", f"query 解析错误: {query!r}"
+        assert len(seqs) == 3, f"应含 query + 2 条同源，得到 {len(seqs)} 行"
+        assert seqs[1] == "AC-EF", f"gap 被误删: {seqs[1]!r}"
+        assert seqs[2] == "-CDEF", f"gap 被误删: {seqs[2]!r}"
+        assert all(len(s) == len(query) for s in seqs), \
+            "保留 '-' 后所有行长度必须等于 query 长度（否则列会错位）"
+
+        # PSSM 必须用到全部 3 行（旧 bug 下 seen=1）
+        pssm = msa_to_pssm(seqs, query, pseudocount=1.0)
+        # 第 0 列：query=A, h1=A, h2='-' → A 计数 2 → 频率 (2+1)/(2+20)=0.136
+        p_a = pssm[0, AA2IDX["A"]]
+        expected = (2 + 1.0) / (2 + 20.0)
+        assert abs(p_a - expected) < 1e-9, \
+            f"PSSM 未正确统计（可能仍有行被跳过）: A={p_a:.4f} 期望 {expected:.4f}"
+        # 该列熵必须低于均匀分布——证明 PSSM 携带信息（旧 bug 下≈均匀）
+        H = -np.sum(pssm[0] * np.log(np.clip(pssm[0], 1e-12, None)))
+        assert H < math.log(20) - 0.05, \
+            f"PSSM 该列熵 {H:.4f} 接近均匀分布，标签可能已退化"
+        print(f"[OK] a3m gap 保留: query={query} seqs={seqs}  "
+              f"第0列 A={p_a:.3f}（期望 {expected:.3f}） 熵={H:.3f}<ln20={math.log(20):.3f}")
+    finally:
+        os.unlink(path)
+
+
 if __name__ == "__main__":
+    test_read_a3m_preserves_gaps()
     test_pipeline()
     test_per_site_alpha()
     print("\nALL EVO-PRIOR TESTS PASSED")
