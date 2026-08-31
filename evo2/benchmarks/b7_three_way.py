@@ -40,6 +40,8 @@ def greedy_reference(oracle, budget=200000, restarts=6, seed=0):
 
     换位阶段解决"按索引顺序贪心占满 max_mut 名额"的陷阱：
     候选 = 把一个已突变位点回退 WT + 把一个未突变位点换成其当前最优 AA。
+    r>0 的重启用随机基因型起点 —— 处理符号上位性景观（如 GB1：
+    单突变均不优于 WT，从 WT 出发贪心第一步即被困）。
     """
     rng = np.random.default_rng(seed)
     L = oracle.L
@@ -55,8 +57,13 @@ def greedy_reference(oracle, budget=200000, restarts=6, seed=0):
     for r in range(restarts):
         if oracle.n_evals > budget:
             break
-        g = oracle.wt_idx.copy()
+        if r == 0:
+            g = oracle.wt_idx.copy()
+        else:
+            g = rng.integers(0, 20, size=L)
+            g = oracle.enforce_max_mut(g[None, :], rng)[0]
         f = float(oracle.evaluate(g[None, :])[0])
+        try_accept(g, f)
         for sweep in range(24):
             improved = False
             order = rng.permutation(L) if r > 0 else np.arange(L)
