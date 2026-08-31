@@ -62,10 +62,36 @@ def _lock_score(aa_idx):
 #   锚点     : 降低 Patch1 正电荷(R85G/R207K) 显著提升判别 Δiface — 与 v1 的"必须为 R"相反
 # ⚠ 混杂警告: n=6 设计且位点突变共现(F88R+Y217R+M255K 总是一起出现),
 #   下表为 in-sample 拟合(Spearman v2 vs dual_S1 = +0.824), 泛化性待去混杂扫描验证。
+# ⚠ 已于 2026-08-31 去混杂检验(job 225686)证伪: v2 在 n=22 无混杂集上
+#   Spearman vs composite = +0.023 ≈ 0 —— 该相关性完全来自位点共变。仅作历史对照保留。
 READ_PREF = {'K': 1.00, 'W': 0.50, 'Y': 0.55, 'F': 0.30, 'Q': 0.20, 'A': -0.20, 'R': -1.00}
 Y217_PREF = {'Y': 1.00, 'F': 0.50, 'W': 0.50, 'A': -0.20, 'K': -0.40, 'R': -0.60}
 M255_PREF = {'M': 1.00, 'I': 0.60, 'L': 0.50, 'A': -0.20, 'R': -0.80, 'K': -1.00}
 ANCHOR_CHARGE = {'R': 1.0, 'K': 0.70, 'H': 0.30}
+
+# ---- 去混杂校准的经验偏好表（2026-08-31, job 225686, 22 变体 × 2 条件 × 8 models）----
+# 校准集: 背景固定 = s13_c1，仅扰动 F88 ∈ {F,K,R,W,Y} × M255 ∈ {A,I,K,M}，Y217 ∈ {Y,F,R}
+# 实测边际效应（中心化；值越大 = 靶标判别越强）:
+#   F88 : K(+0.195) > R(+0.114) > W(-0.045) > Y(-0.052) > F(-0.212)
+#   M255: I(+0.116) > K(+0.003) > A(-0.002) > M(-0.118)    ← 天然 M 最差
+#   Y217: Y(+0.157) > F(-0.076) > R(-0.081)                ← R 为真正的双锁削弱因子
+# 权重（最小二乘）: w = [F88 +1.000, M255 +1.000, Y217 +0.717], bias +0.396
+#
+# ⚠ 关键修正（推翻上一轮结论）:
+#   上一轮(n=6 候选)把"双锁摧毁"归因为 F88R —— 那是混杂假象：
+#   F88R 在真实候选里总与 Y217R+M255K 共现。去混杂后 F88R 的 Δiface 主效应
+#   反而是全场最高 (+9.5)、dual_S1 0.12~0.38（非 0）。真正的削弱因子是 Y217R。
+#   同理 M255K 被错判为"破坏因子"，实测其 Δiface 主效应 (+3.5) 居中，
+#   最差的其实是天然型 M255M (-0.9)。
+# ⚠ 泛化性: LOO-CV Spearman vs composite = +0.583（全量拟合 +0.858）。
+#   即 v3 真实泛化能力中等——8 samples/条件的测量噪声是主要天花板。
+DECONF_PREF = {
+    88:  {'K': +0.195, 'R': +0.114, 'W': -0.045, 'Y': -0.052, 'F': -0.212},
+    255: {'I': +0.116, 'K': +0.003, 'A': -0.002, 'M': -0.118},
+    217: {'Y': +0.157, 'F': -0.076, 'R': -0.081},
+}
+DECONF_W = {88: 1.000, 255: 1.000, 217: 0.717}
+DECONF_BIAS = +0.396
 
 
 class DnaAwareLandscape:
@@ -74,14 +100,19 @@ class DnaAwareLandscape:
     gate_version:
         "v1" —— 解析式启发（芳香读头 / 正电双锁 / 锚点必 R）。
                 已由 Boltz 证伪: Spearman vs 实测双锁率 = −0.588（反相关），仅作对照保留。
-        "v2" —— Boltz-2 标签校准（默认）。Spearman vs 双锁率 +0.824 / vs Δiface +0.928。
+        "v2" —— Boltz-2 n=6 候选标签校准。在 in-sample 上 rho=+0.824，
+                但去混杂检验 (n=22) 显示 rho=+0.023 ≈ 0 —— 该相关性完全来自
+                位点共变混杂（F88R/Y217R/M255K 总是同现）。**已废弃，仅作历史对照。**
+        "v3" —— 去混杂扫描校准（默认）。背景固定 s13_c1 的单点扰动数据，
+                LOO-CV Spearman vs composite = +0.583（全量拟合 +0.858）。
     """
 
     def __init__(self, base_oracle,
                  dna_on="TCATGAGCAGTTTTTTGTTTTTTT",
                  dna_off="TTGCTATTTTTTATTGCTTTGAGT",
                  target_read_base='G', off_read_base='T',
-                 w_base=0.5, w_gate=0.5, gate_version="v2"):
+                 w_base=0.5, w_gate=0.5, gate_version="v3",
+                 anchor_weight=0.0):
         self.base = base_oracle
         self.L = base_oracle.L
         self.wt_idx = base_oracle.wt_idx
@@ -93,6 +124,10 @@ class DnaAwareLandscape:
         self.w_base = w_base
         self.w_gate = w_gate
         self.gate_version = gate_version
+        # 锚点电荷惩罚项权重：来自六候选对照观察（s13_c1 R85G / TrackF_r1 R207K
+        # Δiface 高），但该观察同样存在候选间共变的混杂，且去混杂扫描中锚点是
+        # 固定的（无证据）。故默认 0.0 = 停用；设 >0 可启用（未验证）。
+        self.anchor_weight = anchor_weight
         self.max_mut = getattr(base_oracle, 'max_mut', 12)
 
         # seq_idx -> 列索引
@@ -106,10 +141,12 @@ class DnaAwareLandscape:
 
     # ---- 机制门控 ----
     def _gate(self, geno):
-        """按 gate_version 分派。v2 为 Boltz 校准版本（默认）。"""
+        """按 gate_version 分派。v3 为去混杂校准版本（默认）。"""
         if self.gate_version == "v1":
             return self._gate_v1(geno)
-        return self._gate_v2(geno)
+        if self.gate_version == "v2":
+            return self._gate_v2(geno)
+        return self._gate_v3(geno)
 
     def _gate_v1(self, geno):
         geno = np.asarray(geno, dtype=np.int64)
@@ -148,6 +185,31 @@ class DnaAwareLandscape:
         m255 = M255_PREF.get(aa_at(255), 0.0)
         charge = sum(ANCHOR_CHARGE.get(aa_at(p), 0.0) for p in ANCHOR_PDB) / float(len(ANCHOR_PDB))
         return 0.40 * read + 0.20 * y217 + 0.20 * m255 - 0.20 * charge
+
+    def _gate_v3(self, geno):
+        """去混杂校准门控（job 225686，背景固定 s13_c1 的单点扰动）:
+
+            gate = 1.000*T_F88[aa] + 1.000*T_M255[aa] + 0.717*T_Y217[aa] + 0.396
+                   − anchor_weight * 锚点平均电荷
+
+        位点表为实测边际效应的中心化值（见 DECONF_PREF），
+        因此 gate 的绝对零点 = 22 变体的平均判别水平（>0 优于平均）。
+        锚点项默认停用（去混杂扫描中锚点固定，无证据支持）。
+        """
+        geno = np.asarray(geno, dtype=np.int64)
+
+        def aa_at(pdb):
+            c = self.seqidx_to_col.get(pdb - 22)
+            return AA[int(geno[c])] if c is not None else None
+
+        g = DECONF_BIAS
+        for pdb, wgt in DECONF_W.items():
+            g += wgt * DECONF_PREF[pdb].get(aa_at(pdb), 0.0)
+        if self.anchor_weight:
+            charge = sum(ANCHOR_CHARGE.get(aa_at(p), 0.0)
+                         for p in ANCHOR_PDB) / float(len(ANCHOR_PDB))
+            g -= self.anchor_weight * charge
+        return g
 
     # ---- 组合适应度 ----
     def evaluate(self, genos):
