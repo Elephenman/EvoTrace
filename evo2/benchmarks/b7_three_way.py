@@ -138,6 +138,8 @@ def run_all(oracles, optimizers, budget, seeds, outdir, tag):
                 cfg = {}
                 if oname2 == "wf" and oname in PROPOSALS:
                     cfg["proposal_table"] = PROPOSALS[oname]
+                if oname2 == "dqn":
+                    cfg["train_every"] = 2   # 每 2 环境步训练一次，控制全量耗时
                 opt = cls(orc2, seed=seed, budget=budget, cfg=cfg)
                 t0 = time.time()
                 res = opt.run()
