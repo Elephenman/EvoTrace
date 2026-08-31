@@ -270,6 +270,36 @@ def main():
 
         REBUILD["surrogate_ppri_v3"] = lambda: SurrogateV3Oracle()
         print("[ok] surrogate_ppri_v3 (ESM3 特征代理, held-out 0.407) 可用")
+
+        # DNA 条件门控景观：在 v3 之上叠加 PprI 机制门控（读头/双锁/锚点），
+        # 使景观具备 DNA 维度、能朝靶标进化（修复 v1.1 "洗回 WT / 毁机制" 硬伤）。
+        try:
+            from ppri_dna_aware import DnaAwareLandscape
+
+            class DnaAwareOracle:
+                name = "dna_aware_ppri"
+
+                def __init__(self):
+                    self._base = SurrogateV3Oracle()
+                    self._g = DnaAwareLandscape(self._base)
+                    self.L = self._g.L
+                    self.wt_idx = self._g.wt_idx
+                    self.sites = self._g.sites
+                    self.max_mut = self._g.max_mut
+
+                def evaluate(self, genos):
+                    return self._g.evaluate(np.asarray(genos, dtype=np.int64))
+
+                def n_mutations(self, geno):
+                    return self._g.n_mutations(geno)
+
+                def enforce_max_mut(self, geno, rng):
+                    return self._g.enforce_max_mut(geno, rng)
+
+            REBUILD["dna_aware_ppri"] = lambda: DnaAwareOracle()
+            print("[ok] dna_aware_ppri (DNA 条件门控景观, 24nt 靶标) 可用")
+        except Exception as e:  # noqa
+            print(f"[warn] dna_aware_ppri 不可用: {e}")
     except Exception as e:  # noqa
         print(f"[warn] surrogate_ppri_v3 不可用: {e}")
     keys = list(REBUILD) if which is None else [k for k in which if k in REBUILD]
