@@ -188,6 +188,8 @@ def main():
     ap.add_argument("--oracles", default="all")
     ap.add_argument("--tag", default="v1")
     ap.add_argument("--outdir", default=None)
+    ap.add_argument("--optimizers", default=None,
+                    help="逗号分隔优化器子集（如 ppo,wf），默认全部")
     args = ap.parse_args()
 
     outdir = args.outdir or os.path.join(ROOT, "results")
@@ -199,7 +201,8 @@ def main():
     orc0, G, _wt, _sites = build_ppri_additive()
     _ppri_G_global = G
     wt53 = orc0.wt_idx
-    gb1_proto = GB1PairwiseOracle(max_mut=4) if (which is None or "gb1_pairwise" in which) else None
+    gb1_proto = GB1PairwiseOracle(max_mut=4) if (
+        which is None or "gb1_pairwise" in which or "ppri_cal" in which) else None
 
     REBUILD["ppri_additive"] = lambda: AdditiveOracle(
         G, wt53, max_mut=12, sites=orc0.sites, name="ppri_additive")
@@ -223,6 +226,8 @@ def main():
     oracles = {k: REBUILD[k]() for k in keys}
 
     optimizers = discover_optimizers()
+    if args.optimizers:
+        optimizers = {k: v for k, v in optimizers.items() if k in args.optimizers.split(",")}
     print(f"优化器: {list(optimizers)}  oracle: {keys}  budget={args.budget} seeds={args.seeds}")
 
     df = run_all(oracles, optimizers, args.budget, args.seeds, outdir, args.tag)
