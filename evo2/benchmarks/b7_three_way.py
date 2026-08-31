@@ -153,6 +153,11 @@ def run_all(oracles, optimizers, budget, seeds, outdir, tag):
                     # train_every 2 → 6：numpy DQN 每步构造 [1060,42] 特征数组，
                     # 4000 evals×5 seed 在 8GB 机器上碎片累积爆内存
                     cfg["train_every"] = 6
+                if oname2 == "ppo":
+                    # PPO 超参扫描结论（2026-08-31）：lr=1e-3 主导，代理景观 +6%；
+                    # ent=0.01 在该预算下不敏感。数学景观 lr=3e-4 略优（0.322 vs 0.304）
+                    cfg["lr"] = 1e-3
+                    cfg["ent"] = 0.01
                 opt = cls(orc2, seed=seed, budget=budget, cfg=cfg)
                 t0 = time.time()
                 res = opt.run()
@@ -219,9 +224,54 @@ def main():
     try:
         from engine.surrogate_oracle import build_ppri_surrogate
         REBUILD["surrogate_ppri"] = lambda: build_ppri_surrogate()
-        print("[ok] surrogate_ppri (ProteinGym DL 代理) 可用")
+        print("[ok] surrogate_ppri (ProteinGym DL 代理 v1/one-hot) 可用")
     except Exception as e:  # noqa
         print(f"[warn] surrogate_ppri 不可用: {e}")
+
+    # ESM3 特征版代理（v3）：esm3-sm-open-v1 per-residue emb → PCA → DeepSetV3。
+    # 资产在 evo2/esm3/（train_surrogate_v3.py + ppri_surrogate_v3.py + surrogate_dl_v3/）
+    try:
+        esm3_dir = os.path.join(ROOT, "esm3")
+        if esm3_dir not in sys.path:
+            sys.path.insert(0, esm3_dir)
+        from ppri_surrogate_v3 import PprISurrogateV3
+
+        class SurrogateV3Oracle:
+            name = "surrogate_ppri_v3"
+            max_mut = 12
+
+            def __init__(self):
+                self._o = PprISurrogateV3()
+                self.L = self._o.L
+                self.wt_idx = self._o.wt_idx
+                self.wt_f = self._o.wt_f
+                self.ref_f = self._o.ref_f
+                self.n_evals = 0
+                self.sites = self._o.sites
+
+            def evaluate(self, genos):
+                self.n_evals += len(genos)
+                return self._o.evaluate_multi(np.asarray(genos, dtype=np.int64))
+
+            def n_mutations(self, geno):
+                geno = np.atleast_2d(geno)
+                return (geno != self.wt_idx).sum(1)
+
+            def enforce_max_mut(self, geno, rng):
+                geno = np.atleast_2d(geno).copy()
+                if not self.max_mut:
+                    return geno
+                n_mut = self.n_mutations(geno)
+                for n in np.flatnonzero(n_mut > self.max_mut):
+                    ms = np.flatnonzero(geno[n] != self.wt_idx)
+                    drop = rng.choice(ms, size=int(n_mut[n] - self.max_mut), replace=False)
+                    geno[n, drop] = self.wt_idx[drop]
+                return geno
+
+        REBUILD["surrogate_ppri_v3"] = lambda: SurrogateV3Oracle()
+        print("[ok] surrogate_ppri_v3 (ESM3 特征代理, held-out 0.407) 可用")
+    except Exception as e:  # noqa
+        print(f"[warn] surrogate_ppri_v3 不可用: {e}")
     keys = list(REBUILD) if which is None else [k for k in which if k in REBUILD]
     oracles = {k: REBUILD[k]() for k in keys}
 
