@@ -1,0 +1,8 @@
+test,s,Ne,empirical,theoretical,abs_err,n_pop,total_hits,obs,expected,z,n_gen,slope,start5,end5
+fixation,0.01,200.0,0.0175,0.0202,0.0027,,,,,,,,,
+fixation,0.02,200.0,0.0348,0.0392,0.0045,,,,,,,,,
+fixation,0.05,200.0,0.0945,0.0952,0.0007,,,,,,,,,
+fixation,0.1,200.0,0.1703,0.1813,0.011,,,,,,,,,
+fixation,0.2,200.0,0.3202,0.3297,0.0094,,,,,,,,,
+parallelism,,,,,,8.0,48.0,4.1071,0.008,242.63,,,,
+net_adaptation_slope,,,,,,,,,,,40.0,0.09179,4.841,8.513

@@ -1,0 +1,22 @@
+  [v1 s11] round 20 budget=136 T=0.80
+  [v1 s11] round 40 budget=155 T=0.80
+  [v1 s11] round 60 budget=163 T=0.80
+  [v1 s11] round 80 budget=166 T=0.80
+  [v1 s11] round 100 budget=167 T=0.80
+  [v1 s11] round 120 budget=171 T=0.80
+  [v1 s11] round 140 budget=171 T=0.80
+  [v1 s11] round 160 budget=171 T=0.80
+  [v1 s11] round 180 budget=172 T=0.80
+  [v1 s11] round 200 budget=172 T=0.80
+  [v1 s11] round 220 budget=173 T=0.80
+  [v1 s11] round 240 budget=173 T=0.80
+  [v1 s11] round 260 budget=173 T=0.80
+  [v1 s11] round 280 budget=173 T=0.80
+  [v1 s11] round 300 budget=173 T=0.80
+  [v1 s11] round 320 budget=173 T=0.80
+  [v1 s11] round 340 budget=173 T=0.80
+  [v1 s11] round 360 budget=173 T=0.80
+  [v1 s11] round 380 budget=173 T=0.80
+  [v1 s11] round 400 budget=173 T=0.80
+  [v1 s11] round cap hit
+v1 done: {'strategy': 'v1', 'seed': 11, 'budget_target': 192, 'budget_used': 173, 'spearman_test': 0.1402, 'spearman_train': 0.2611, 'top16_test': 0.003, 'wall_s': 48.6} 48.6 s

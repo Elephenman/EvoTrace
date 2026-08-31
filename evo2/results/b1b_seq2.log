@@ -1,0 +1,2 @@
+v1 {'strategy': 'v1', 'seed': 11, 'budget_target': 1536, 'budget_used': 1526, 'spearman_test': 0.1402, 'spearman_train': 0.2611, 'top16_test': 0.003} 44.3 s
+v2 {'strategy': 'v2', 'seed': 11, 'budget_target': 1536, 'budget_used': 1536, 'spearman_test': 0.766, 'spearman_train': 0.4934, 'top16_test': 4.317} 10.1 s

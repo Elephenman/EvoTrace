@@ -1,0 +1,1609 @@
+{
+ "2": {
+  "dominant_class": "surface",
+  "min_dist": 17.05,
+  "contacts": {},
+  "buried_density": 52,
+  "anchor": false
+ },
+ "3": {
+  "dominant_class": "surface",
+  "min_dist": 16.24,
+  "contacts": {},
+  "buried_density": 61,
+  "anchor": false
+ },
+ "4": {
+  "dominant_class": "buried",
+  "min_dist": 14.85,
+  "contacts": {},
+  "buried_density": 84,
+  "anchor": false
+ },
+ "5": {
+  "dominant_class": "buried",
+  "min_dist": 15.8,
+  "contacts": {},
+  "buried_density": 77,
+  "anchor": false
+ },
+ "6": {
+  "dominant_class": "surface",
+  "min_dist": 17.71,
+  "contacts": {},
+  "buried_density": 54,
+  "anchor": false
+ },
+ "7": {
+  "dominant_class": "surface",
+  "min_dist": 14.78,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "8": {
+  "dominant_class": "buried",
+  "min_dist": 10.15,
+  "contacts": {},
+  "buried_density": 87,
+  "anchor": false
+ },
+ "9": {
+  "dominant_class": "surface",
+  "min_dist": 16.75,
+  "contacts": {},
+  "buried_density": 57,
+  "anchor": false
+ },
+ "10": {
+  "dominant_class": "surface",
+  "min_dist": 14.92,
+  "contacts": {},
+  "buried_density": 56,
+  "anchor": false
+ },
+ "11": {
+  "dominant_class": "surface",
+  "min_dist": 13.81,
+  "contacts": {},
+  "buried_density": 62,
+  "anchor": false
+ },
+ "12": {
+  "dominant_class": "buried",
+  "min_dist": 11.01,
+  "contacts": {},
+  "buried_density": 95,
+  "anchor": false
+ },
+ "13": {
+  "dominant_class": "buried",
+  "min_dist": 11.07,
+  "contacts": {},
+  "buried_density": 78,
+  "anchor": false
+ },
+ "14": {
+  "dominant_class": "buried",
+  "min_dist": 6.76,
+  "contacts": {},
+  "buried_density": 99,
+  "anchor": false
+ },
+ "15": {
+  "dominant_class": "buried",
+  "min_dist": 8.64,
+  "contacts": {},
+  "buried_density": 87,
+  "anchor": false
+ },
+ "16": {
+  "dominant_class": "buried",
+  "min_dist": 5.83,
+  "contacts": {},
+  "buried_density": 102,
+  "anchor": false
+ },
+ "17": {
+  "dominant_class": "buried",
+  "min_dist": 9.41,
+  "contacts": {},
+  "buried_density": 91,
+  "anchor": false
+ },
+ "18": {
+  "dominant_class": "buried",
+  "min_dist": 8.7,
+  "contacts": {},
+  "buried_density": 92,
+  "anchor": false
+ },
+ "19": {
+  "dominant_class": "buried",
+  "min_dist": 12.29,
+  "contacts": {},
+  "buried_density": 77,
+  "anchor": false
+ },
+ "20": {
+  "dominant_class": "buried",
+  "min_dist": 14.03,
+  "contacts": {},
+  "buried_density": 90,
+  "anchor": false
+ },
+ "21": {
+  "dominant_class": "buried",
+  "min_dist": 15.97,
+  "contacts": {},
+  "buried_density": 84,
+  "anchor": false
+ },
+ "22": {
+  "dominant_class": "buried",
+  "min_dist": 15.34,
+  "contacts": {},
+  "buried_density": 109,
+  "anchor": false
+ },
+ "23": {
+  "dominant_class": "surface",
+  "min_dist": 19.97,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "24": {
+  "dominant_class": "surface",
+  "min_dist": 21.81,
+  "contacts": {},
+  "buried_density": 50,
+  "anchor": false
+ },
+ "25": {
+  "dominant_class": "surface",
+  "min_dist": 18.43,
+  "contacts": {},
+  "buried_density": 63,
+  "anchor": false
+ },
+ "26": {
+  "dominant_class": "surface",
+  "min_dist": 18.39,
+  "contacts": {},
+  "buried_density": 66,
+  "anchor": false
+ },
+ "27": {
+  "dominant_class": "buried",
+  "min_dist": 12.71,
+  "contacts": {},
+  "buried_density": 87,
+  "anchor": false
+ },
+ "28": {
+  "dominant_class": "buried",
+  "min_dist": 13.75,
+  "contacts": {},
+  "buried_density": 81,
+  "anchor": false
+ },
+ "29": {
+  "dominant_class": "buried",
+  "min_dist": 9.88,
+  "contacts": {},
+  "buried_density": 104,
+  "anchor": false
+ },
+ "30": {
+  "dominant_class": "buried",
+  "min_dist": 10.62,
+  "contacts": {},
+  "buried_density": 89,
+  "anchor": false
+ },
+ "31": {
+  "dominant_class": "buried",
+  "min_dist": 8.93,
+  "contacts": {},
+  "buried_density": 98,
+  "anchor": false
+ },
+ "32": {
+  "dominant_class": "buried",
+  "min_dist": 8.93,
+  "contacts": {},
+  "buried_density": 82,
+  "anchor": false
+ },
+ "33": {
+  "dominant_class": "buried",
+  "min_dist": 9.17,
+  "contacts": {},
+  "buried_density": 74,
+  "anchor": false
+ },
+ "34": {
+  "dominant_class": "buried",
+  "min_dist": 8.21,
+  "contacts": {},
+  "buried_density": 82,
+  "anchor": false
+ },
+ "35": {
+  "dominant_class": "buried",
+  "min_dist": 9.05,
+  "contacts": {},
+  "buried_density": 101,
+  "anchor": false
+ },
+ "36": {
+  "dominant_class": "buried",
+  "min_dist": 10.75,
+  "contacts": {},
+  "buried_density": 102,
+  "anchor": false
+ },
+ "37": {
+  "dominant_class": "buried",
+  "min_dist": 12.34,
+  "contacts": {},
+  "buried_density": 102,
+  "anchor": false
+ },
+ "38": {
+  "dominant_class": "buried",
+  "min_dist": 14.64,
+  "contacts": {},
+  "buried_density": 73,
+  "anchor": false
+ },
+ "39": {
+  "dominant_class": "buried",
+  "min_dist": 13.02,
+  "contacts": {},
+  "buried_density": 75,
+  "anchor": false
+ },
+ "40": {
+  "dominant_class": "buried",
+  "min_dist": 9.46,
+  "contacts": {},
+  "buried_density": 101,
+  "anchor": false
+ },
+ "41": {
+  "dominant_class": "buried",
+  "min_dist": 8.72,
+  "contacts": {},
+  "buried_density": 101,
+  "anchor": false
+ },
+ "42": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 4.13,
+  "contacts": {
+   "chromophore_edge": 2
+  },
+  "buried_density": 108,
+  "anchor": false
+ },
+ "43": {
+  "dominant_class": "buried",
+  "min_dist": 7.24,
+  "contacts": {},
+  "buried_density": 81,
+  "anchor": false
+ },
+ "44": {
+  "dominant_class": "buried",
+  "min_dist": 4.73,
+  "contacts": {},
+  "buried_density": 87,
+  "anchor": false
+ },
+ "45": {
+  "dominant_class": "buried",
+  "min_dist": 8.26,
+  "contacts": {},
+  "buried_density": 79,
+  "anchor": false
+ },
+ "46": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 4.39,
+  "contacts": {
+   "chromophore_edge": 1
+  },
+  "buried_density": 98,
+  "anchor": false
+ },
+ "47": {
+  "dominant_class": "buried",
+  "min_dist": 11.59,
+  "contacts": {},
+  "buried_density": 99,
+  "anchor": false
+ },
+ "48": {
+  "dominant_class": "buried",
+  "min_dist": 14.3,
+  "contacts": {},
+  "buried_density": 103,
+  "anchor": false
+ },
+ "49": {
+  "dominant_class": "surface",
+  "min_dist": 15.8,
+  "contacts": {},
+  "buried_density": 64,
+  "anchor": false
+ },
+ "50": {
+  "dominant_class": "surface",
+  "min_dist": 17.66,
+  "contacts": {},
+  "buried_density": 49,
+  "anchor": false
+ },
+ "51": {
+  "dominant_class": "surface",
+  "min_dist": 18.02,
+  "contacts": {},
+  "buried_density": 57,
+  "anchor": false
+ },
+ "52": {
+  "dominant_class": "surface",
+  "min_dist": 18.11,
+  "contacts": {},
+  "buried_density": 54,
+  "anchor": false
+ },
+ "53": {
+  "dominant_class": "buried",
+  "min_dist": 12.52,
+  "contacts": {},
+  "buried_density": 91,
+  "anchor": false
+ },
+ "54": {
+  "dominant_class": "buried",
+  "min_dist": 16.33,
+  "contacts": {},
+  "buried_density": 82,
+  "anchor": false
+ },
+ "55": {
+  "dominant_class": "buried",
+  "min_dist": 13.42,
+  "contacts": {},
+  "buried_density": 92,
+  "anchor": false
+ },
+ "56": {
+  "dominant_class": "buried",
+  "min_dist": 11.99,
+  "contacts": {},
+  "buried_density": 98,
+  "anchor": false
+ },
+ "57": {
+  "dominant_class": "buried",
+  "min_dist": 9.19,
+  "contacts": {},
+  "buried_density": 87,
+  "anchor": false
+ },
+ "58": {
+  "dominant_class": "buried",
+  "min_dist": 8.27,
+  "contacts": {},
+  "buried_density": 97,
+  "anchor": false
+ },
+ "59": {
+  "dominant_class": "buried",
+  "min_dist": 8.84,
+  "contacts": {},
+  "buried_density": 96,
+  "anchor": false
+ },
+ "60": {
+  "dominant_class": "buried",
+  "min_dist": 4.87,
+  "contacts": {},
+  "buried_density": 97,
+  "anchor": false
+ },
+ "61": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 2.78,
+  "contacts": {
+   "chromophore_edge": 14
+  },
+  "buried_density": 109,
+  "anchor": false
+ },
+ "62": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 2.8,
+  "contacts": {
+   "chromophore_edge": 35
+  },
+  "buried_density": 99,
+  "anchor": false
+ },
+ "63": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.33,
+  "contacts": {
+   "chromophore_edge": 7
+  },
+  "buried_density": 96,
+  "anchor": false
+ },
+ "64": {
+  "dominant_class": "chromophore_core",
+  "min_dist": 1.33,
+  "contacts": {
+   "chromophore_edge": 25
+  },
+  "buried_density": 100,
+  "anchor": false
+ },
+ "65": {
+  "dominant_class": "chromophore_core",
+  "min_dist": null,
+  "contacts": {},
+  "buried_density": -1,
+  "anchor": false
+ },
+ "66": {
+  "dominant_class": "chromophore_core",
+  "min_dist": null,
+  "contacts": {},
+  "buried_density": -1,
+  "anchor": false
+ },
+ "68": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 1.33,
+  "contacts": {
+   "chromophore_edge": 24
+  },
+  "buried_density": 98,
+  "anchor": false
+ },
+ "69": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.33,
+  "contacts": {
+   "chromophore_edge": 13
+  },
+  "buried_density": 93,
+  "anchor": false
+ },
+ "70": {
+  "dominant_class": "buried",
+  "min_dist": 6.18,
+  "contacts": {},
+  "buried_density": 96,
+  "anchor": false
+ },
+ "71": {
+  "dominant_class": "buried",
+  "min_dist": 7.14,
+  "contacts": {},
+  "buried_density": 104,
+  "anchor": false
+ },
+ "72": {
+  "dominant_class": "buried",
+  "min_dist": 7.86,
+  "contacts": {},
+  "buried_density": 107,
+  "anchor": false
+ },
+ "73": {
+  "dominant_class": "buried",
+  "min_dist": 11.89,
+  "contacts": {},
+  "buried_density": 94,
+  "anchor": false
+ },
+ "74": {
+  "dominant_class": "buried",
+  "min_dist": 11.23,
+  "contacts": {},
+  "buried_density": 93,
+  "anchor": false
+ },
+ "75": {
+  "dominant_class": "surface",
+  "min_dist": 16.0,
+  "contacts": {},
+  "buried_density": 64,
+  "anchor": false
+ },
+ "76": {
+  "dominant_class": "surface",
+  "min_dist": 20.45,
+  "contacts": {},
+  "buried_density": 41,
+  "anchor": false
+ },
+ "77": {
+  "dominant_class": "surface",
+  "min_dist": 20.21,
+  "contacts": {},
+  "buried_density": 47,
+  "anchor": false
+ },
+ "79": {
+  "dominant_class": "buried",
+  "min_dist": 17.67,
+  "contacts": {},
+  "buried_density": 78,
+  "anchor": false
+ },
+ "80": {
+  "dominant_class": "surface",
+  "min_dist": 18.43,
+  "contacts": {},
+  "buried_density": 64,
+  "anchor": false
+ },
+ "81": {
+  "dominant_class": "buried",
+  "min_dist": 14.14,
+  "contacts": {},
+  "buried_density": 90,
+  "anchor": false
+ },
+ "82": {
+  "dominant_class": "buried",
+  "min_dist": 11.7,
+  "contacts": {},
+  "buried_density": 103,
+  "anchor": false
+ },
+ "83": {
+  "dominant_class": "buried",
+  "min_dist": 10.1,
+  "contacts": {},
+  "buried_density": 104,
+  "anchor": false
+ },
+ "84": {
+  "dominant_class": "buried",
+  "min_dist": 6.79,
+  "contacts": {},
+  "buried_density": 102,
+  "anchor": false
+ },
+ "85": {
+  "dominant_class": "buried",
+  "min_dist": 10.72,
+  "contacts": {},
+  "buried_density": 97,
+  "anchor": false
+ },
+ "86": {
+  "dominant_class": "buried",
+  "min_dist": 13.06,
+  "contacts": {},
+  "buried_density": 90,
+  "anchor": false
+ },
+ "87": {
+  "dominant_class": "buried",
+  "min_dist": 11.46,
+  "contacts": {},
+  "buried_density": 112,
+  "anchor": false
+ },
+ "89": {
+  "dominant_class": "buried",
+  "min_dist": 12.57,
+  "contacts": {},
+  "buried_density": 73,
+  "anchor": false
+ },
+ "90": {
+  "dominant_class": "surface",
+  "min_dist": 12.3,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "91": {
+  "dominant_class": "buried",
+  "min_dist": 10.16,
+  "contacts": {},
+  "buried_density": 96,
+  "anchor": false
+ },
+ "92": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 4.43,
+  "contacts": {
+   "chromophore_edge": 1
+  },
+  "buried_density": 101,
+  "anchor": false
+ },
+ "93": {
+  "dominant_class": "buried",
+  "min_dist": 8.4,
+  "contacts": {},
+  "buried_density": 100,
+  "anchor": false
+ },
+ "94": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.03,
+  "contacts": {
+   "chromophore_edge": 9
+  },
+  "buried_density": 109,
+  "anchor": false
+ },
+ "95": {
+  "dominant_class": "buried",
+  "min_dist": 8.8,
+  "contacts": {},
+  "buried_density": 93,
+  "anchor": false
+ },
+ "96": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 2.73,
+  "contacts": {
+   "chromophore_edge": 8
+  },
+  "buried_density": 99,
+  "anchor": false
+ },
+ "97": {
+  "dominant_class": "buried",
+  "min_dist": 10.88,
+  "contacts": {},
+  "buried_density": 88,
+  "anchor": false
+ },
+ "98": {
+  "dominant_class": "buried",
+  "min_dist": 8.78,
+  "contacts": {},
+  "buried_density": 109,
+  "anchor": false
+ },
+ "99": {
+  "dominant_class": "buried",
+  "min_dist": 12.98,
+  "contacts": {},
+  "buried_density": 97,
+  "anchor": false
+ },
+ "100": {
+  "dominant_class": "buried",
+  "min_dist": 12.2,
+  "contacts": {},
+  "buried_density": 99,
+  "anchor": false
+ },
+ "101": {
+  "dominant_class": "buried",
+  "min_dist": 15.69,
+  "contacts": {},
+  "buried_density": 72,
+  "anchor": false
+ },
+ "102": {
+  "dominant_class": "surface",
+  "min_dist": 19.14,
+  "contacts": {},
+  "buried_density": 45,
+  "anchor": false
+ },
+ "103": {
+  "dominant_class": "buried",
+  "min_dist": 18.88,
+  "contacts": {},
+  "buried_density": 81,
+  "anchor": false
+ },
+ "104": {
+  "dominant_class": "buried",
+  "min_dist": 16.77,
+  "contacts": {},
+  "buried_density": 99,
+  "anchor": false
+ },
+ "105": {
+  "dominant_class": "buried",
+  "min_dist": 15.7,
+  "contacts": {},
+  "buried_density": 105,
+  "anchor": false
+ },
+ "106": {
+  "dominant_class": "buried",
+  "min_dist": 11.42,
+  "contacts": {},
+  "buried_density": 103,
+  "anchor": false
+ },
+ "107": {
+  "dominant_class": "buried",
+  "min_dist": 12.5,
+  "contacts": {},
+  "buried_density": 81,
+  "anchor": false
+ },
+ "108": {
+  "dominant_class": "buried",
+  "min_dist": 8.48,
+  "contacts": {},
+  "buried_density": 92,
+  "anchor": false
+ },
+ "109": {
+  "dominant_class": "buried",
+  "min_dist": 9.3,
+  "contacts": {},
+  "buried_density": 78,
+  "anchor": false
+ },
+ "110": {
+  "dominant_class": "buried",
+  "min_dist": 6.38,
+  "contacts": {},
+  "buried_density": 98,
+  "anchor": false
+ },
+ "111": {
+  "dominant_class": "buried",
+  "min_dist": 7.15,
+  "contacts": {},
+  "buried_density": 96,
+  "anchor": false
+ },
+ "112": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.97,
+  "contacts": {
+   "chromophore_edge": 1
+  },
+  "buried_density": 102,
+  "anchor": false
+ },
+ "113": {
+  "dominant_class": "buried",
+  "min_dist": 8.02,
+  "contacts": {},
+  "buried_density": 96,
+  "anchor": false
+ },
+ "114": {
+  "dominant_class": "buried",
+  "min_dist": 11.05,
+  "contacts": {},
+  "buried_density": 83,
+  "anchor": false
+ },
+ "115": {
+  "dominant_class": "surface",
+  "min_dist": 13.37,
+  "contacts": {},
+  "buried_density": 60,
+  "anchor": false
+ },
+ "116": {
+  "dominant_class": "surface",
+  "min_dist": 16.0,
+  "contacts": {},
+  "buried_density": 39,
+  "anchor": false
+ },
+ "117": {
+  "dominant_class": "surface",
+  "min_dist": 14.7,
+  "contacts": {},
+  "buried_density": 52,
+  "anchor": false
+ },
+ "118": {
+  "dominant_class": "buried",
+  "min_dist": 12.06,
+  "contacts": {},
+  "buried_density": 81,
+  "anchor": false
+ },
+ "119": {
+  "dominant_class": "buried",
+  "min_dist": 6.52,
+  "contacts": {},
+  "buried_density": 98,
+  "anchor": false
+ },
+ "120": {
+  "dominant_class": "buried",
+  "min_dist": 7.06,
+  "contacts": {},
+  "buried_density": 103,
+  "anchor": false
+ },
+ "121": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.83,
+  "contacts": {
+   "chromophore_edge": 5
+  },
+  "buried_density": 97,
+  "anchor": false
+ },
+ "122": {
+  "dominant_class": "buried",
+  "min_dist": 7.52,
+  "contacts": {},
+  "buried_density": 79,
+  "anchor": false
+ },
+ "123": {
+  "dominant_class": "buried",
+  "min_dist": 6.56,
+  "contacts": {},
+  "buried_density": 89,
+  "anchor": false
+ },
+ "124": {
+  "dominant_class": "buried",
+  "min_dist": 10.9,
+  "contacts": {},
+  "buried_density": 73,
+  "anchor": false
+ },
+ "125": {
+  "dominant_class": "buried",
+  "min_dist": 10.41,
+  "contacts": {},
+  "buried_density": 91,
+  "anchor": false
+ },
+ "126": {
+  "dominant_class": "buried",
+  "min_dist": 14.39,
+  "contacts": {},
+  "buried_density": 81,
+  "anchor": false
+ },
+ "127": {
+  "dominant_class": "buried",
+  "min_dist": 16.33,
+  "contacts": {},
+  "buried_density": 105,
+  "anchor": false
+ },
+ "128": {
+  "dominant_class": "buried",
+  "min_dist": 18.75,
+  "contacts": {},
+  "buried_density": 81,
+  "anchor": false
+ },
+ "129": {
+  "dominant_class": "surface",
+  "min_dist": 21.93,
+  "contacts": {},
+  "buried_density": 62,
+  "anchor": false
+ },
+ "130": {
+  "dominant_class": "buried",
+  "min_dist": 16.53,
+  "contacts": {},
+  "buried_density": 92,
+  "anchor": false
+ },
+ "131": {
+  "dominant_class": "surface",
+  "min_dist": 22.88,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "132": {
+  "dominant_class": "surface",
+  "min_dist": 24.93,
+  "contacts": {},
+  "buried_density": 51,
+  "anchor": false
+ },
+ "133": {
+  "dominant_class": "surface",
+  "min_dist": 24.18,
+  "contacts": {},
+  "buried_density": 51,
+  "anchor": false
+ },
+ "134": {
+  "dominant_class": "buried",
+  "min_dist": 21.03,
+  "contacts": {},
+  "buried_density": 78,
+  "anchor": false
+ },
+ "135": {
+  "dominant_class": "buried",
+  "min_dist": 17.89,
+  "contacts": {},
+  "buried_density": 83,
+  "anchor": false
+ },
+ "136": {
+  "dominant_class": "buried",
+  "min_dist": 15.96,
+  "contacts": {},
+  "buried_density": 115,
+  "anchor": false
+ },
+ "137": {
+  "dominant_class": "buried",
+  "min_dist": 19.69,
+  "contacts": {},
+  "buried_density": 87,
+  "anchor": false
+ },
+ "138": {
+  "dominant_class": "surface",
+  "min_dist": 21.64,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "139": {
+  "dominant_class": "buried",
+  "min_dist": 18.09,
+  "contacts": {},
+  "buried_density": 72,
+  "anchor": false
+ },
+ "140": {
+  "dominant_class": "buried",
+  "min_dist": 17.76,
+  "contacts": {},
+  "buried_density": 76,
+  "anchor": false
+ },
+ "141": {
+  "dominant_class": "buried",
+  "min_dist": 13.25,
+  "contacts": {},
+  "buried_density": 103,
+  "anchor": false
+ },
+ "142": {
+  "dominant_class": "buried",
+  "min_dist": 12.99,
+  "contacts": {},
+  "buried_density": 74,
+  "anchor": false
+ },
+ "143": {
+  "dominant_class": "surface",
+  "min_dist": 12.24,
+  "contacts": {},
+  "buried_density": 64,
+  "anchor": false
+ },
+ "144": {
+  "dominant_class": "buried",
+  "min_dist": 9.41,
+  "contacts": {},
+  "buried_density": 76,
+  "anchor": false
+ },
+ "145": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.6,
+  "contacts": {
+   "chromophore_edge": 4
+  },
+  "buried_density": 87,
+  "anchor": false
+ },
+ "146": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 4.19,
+  "contacts": {
+   "chromophore_edge": 1
+  },
+  "buried_density": 79,
+  "anchor": false
+ },
+ "147": {
+  "dominant_class": "buried",
+  "min_dist": 5.03,
+  "contacts": {},
+  "buried_density": 76,
+  "anchor": false
+ },
+ "148": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 2.85,
+  "contacts": {
+   "chromophore_edge": 7
+  },
+  "buried_density": 86,
+  "anchor": false
+ },
+ "149": {
+  "dominant_class": "buried",
+  "min_dist": 6.28,
+  "contacts": {},
+  "buried_density": 90,
+  "anchor": false
+ },
+ "150": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.79,
+  "contacts": {
+   "chromophore_edge": 2
+  },
+  "buried_density": 106,
+  "anchor": false
+ },
+ "151": {
+  "dominant_class": "buried",
+  "min_dist": 8.32,
+  "contacts": {},
+  "buried_density": 89,
+  "anchor": false
+ },
+ "152": {
+  "dominant_class": "buried",
+  "min_dist": 9.32,
+  "contacts": {},
+  "buried_density": 95,
+  "anchor": false
+ },
+ "154": {
+  "dominant_class": "buried",
+  "min_dist": 15.6,
+  "contacts": {},
+  "buried_density": 77,
+  "anchor": false
+ },
+ "155": {
+  "dominant_class": "surface",
+  "min_dist": 16.06,
+  "contacts": {},
+  "buried_density": 59,
+  "anchor": false
+ },
+ "156": {
+  "dominant_class": "surface",
+  "min_dist": 19.17,
+  "contacts": {},
+  "buried_density": 44,
+  "anchor": false
+ },
+ "157": {
+  "dominant_class": "surface",
+  "min_dist": 20.49,
+  "contacts": {},
+  "buried_density": 33,
+  "anchor": false
+ },
+ "158": {
+  "dominant_class": "surface",
+  "min_dist": 17.1,
+  "contacts": {},
+  "buried_density": 47,
+  "anchor": false
+ },
+ "159": {
+  "dominant_class": "surface",
+  "min_dist": 15.69,
+  "contacts": {},
+  "buried_density": 68,
+  "anchor": false
+ },
+ "160": {
+  "dominant_class": "buried",
+  "min_dist": 14.04,
+  "contacts": {},
+  "buried_density": 99,
+  "anchor": false
+ },
+ "161": {
+  "dominant_class": "buried",
+  "min_dist": 9.31,
+  "contacts": {},
+  "buried_density": 99,
+  "anchor": false
+ },
+ "162": {
+  "dominant_class": "buried",
+  "min_dist": 11.08,
+  "contacts": {},
+  "buried_density": 78,
+  "anchor": false
+ },
+ "163": {
+  "dominant_class": "buried",
+  "min_dist": 7.38,
+  "contacts": {},
+  "buried_density": 95,
+  "anchor": false
+ },
+ "164": {
+  "dominant_class": "buried",
+  "min_dist": 8.37,
+  "contacts": {},
+  "buried_density": 90,
+  "anchor": false
+ },
+ "165": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.74,
+  "contacts": {
+   "chromophore_edge": 3
+  },
+  "buried_density": 101,
+  "anchor": false
+ },
+ "166": {
+  "dominant_class": "buried",
+  "min_dist": 6.99,
+  "contacts": {},
+  "buried_density": 87,
+  "anchor": false
+ },
+ "167": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.93,
+  "contacts": {
+   "chromophore_edge": 3
+  },
+  "buried_density": 109,
+  "anchor": false
+ },
+ "168": {
+  "dominant_class": "buried",
+  "min_dist": 7.58,
+  "contacts": {},
+  "buried_density": 90,
+  "anchor": false
+ },
+ "169": {
+  "dominant_class": "buried",
+  "min_dist": 8.51,
+  "contacts": {},
+  "buried_density": 116,
+  "anchor": false
+ },
+ "170": {
+  "dominant_class": "buried",
+  "min_dist": 11.57,
+  "contacts": {},
+  "buried_density": 96,
+  "anchor": false
+ },
+ "171": {
+  "dominant_class": "buried",
+  "min_dist": 15.06,
+  "contacts": {},
+  "buried_density": 96,
+  "anchor": false
+ },
+ "172": {
+  "dominant_class": "surface",
+  "min_dist": 17.92,
+  "contacts": {},
+  "buried_density": 66,
+  "anchor": false
+ },
+ "173": {
+  "dominant_class": "surface",
+  "min_dist": 19.91,
+  "contacts": {},
+  "buried_density": 44,
+  "anchor": false
+ },
+ "174": {
+  "dominant_class": "surface",
+  "min_dist": 17.98,
+  "contacts": {},
+  "buried_density": 46,
+  "anchor": false
+ },
+ "175": {
+  "dominant_class": "surface",
+  "min_dist": 15.77,
+  "contacts": {},
+  "buried_density": 50,
+  "anchor": false
+ },
+ "176": {
+  "dominant_class": "buried",
+  "min_dist": 13.06,
+  "contacts": {},
+  "buried_density": 70,
+  "anchor": false
+ },
+ "177": {
+  "dominant_class": "buried",
+  "min_dist": 11.55,
+  "contacts": {},
+  "buried_density": 88,
+  "anchor": false
+ },
+ "178": {
+  "dominant_class": "buried",
+  "min_dist": 11.87,
+  "contacts": {},
+  "buried_density": 89,
+  "anchor": false
+ },
+ "179": {
+  "dominant_class": "buried",
+  "min_dist": 8.87,
+  "contacts": {},
+  "buried_density": 105,
+  "anchor": false
+ },
+ "180": {
+  "dominant_class": "buried",
+  "min_dist": 10.34,
+  "contacts": {},
+  "buried_density": 102,
+  "anchor": false
+ },
+ "181": {
+  "dominant_class": "buried",
+  "min_dist": 6.24,
+  "contacts": {},
+  "buried_density": 112,
+  "anchor": false
+ },
+ "182": {
+  "dominant_class": "buried",
+  "min_dist": 9.7,
+  "contacts": {},
+  "buried_density": 100,
+  "anchor": false
+ },
+ "183": {
+  "dominant_class": "buried",
+  "min_dist": 4.72,
+  "contacts": {},
+  "buried_density": 99,
+  "anchor": false
+ },
+ "184": {
+  "dominant_class": "buried",
+  "min_dist": 9.18,
+  "contacts": {},
+  "buried_density": 92,
+  "anchor": false
+ },
+ "185": {
+  "dominant_class": "buried",
+  "min_dist": 6.68,
+  "contacts": {},
+  "buried_density": 110,
+  "anchor": false
+ },
+ "186": {
+  "dominant_class": "buried",
+  "min_dist": 11.1,
+  "contacts": {},
+  "buried_density": 88,
+  "anchor": false
+ },
+ "187": {
+  "dominant_class": "buried",
+  "min_dist": 12.92,
+  "contacts": {},
+  "buried_density": 90,
+  "anchor": false
+ },
+ "188": {
+  "dominant_class": "surface",
+  "min_dist": 11.36,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "189": {
+  "dominant_class": "surface",
+  "min_dist": 15.35,
+  "contacts": {},
+  "buried_density": 57,
+  "anchor": false
+ },
+ "190": {
+  "dominant_class": "surface",
+  "min_dist": 18.77,
+  "contacts": {},
+  "buried_density": 44,
+  "anchor": false
+ },
+ "191": {
+  "dominant_class": "surface",
+  "min_dist": 18.66,
+  "contacts": {},
+  "buried_density": 46,
+  "anchor": false
+ },
+ "192": {
+  "dominant_class": "surface",
+  "min_dist": 17.93,
+  "contacts": {},
+  "buried_density": 46,
+  "anchor": false
+ },
+ "193": {
+  "dominant_class": "buried",
+  "min_dist": 15.15,
+  "contacts": {},
+  "buried_density": 81,
+  "anchor": false
+ },
+ "194": {
+  "dominant_class": "buried",
+  "min_dist": 15.69,
+  "contacts": {},
+  "buried_density": 78,
+  "anchor": false
+ },
+ "195": {
+  "dominant_class": "buried",
+  "min_dist": 17.13,
+  "contacts": {},
+  "buried_density": 87,
+  "anchor": false
+ },
+ "196": {
+  "dominant_class": "buried",
+  "min_dist": 14.3,
+  "contacts": {},
+  "buried_density": 93,
+  "anchor": false
+ },
+ "197": {
+  "dominant_class": "surface",
+  "min_dist": 16.36,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "198": {
+  "dominant_class": "surface",
+  "min_dist": 15.72,
+  "contacts": {},
+  "buried_density": 65,
+  "anchor": false
+ },
+ "199": {
+  "dominant_class": "buried",
+  "min_dist": 12.0,
+  "contacts": {},
+  "buried_density": 90,
+  "anchor": false
+ },
+ "200": {
+  "dominant_class": "buried",
+  "min_dist": 9.99,
+  "contacts": {},
+  "buried_density": 97,
+  "anchor": false
+ },
+ "201": {
+  "dominant_class": "buried",
+  "min_dist": 6.74,
+  "contacts": {},
+  "buried_density": 106,
+  "anchor": false
+ },
+ "202": {
+  "dominant_class": "buried",
+  "min_dist": 6.74,
+  "contacts": {},
+  "buried_density": 89,
+  "anchor": false
+ },
+ "203": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 2.67,
+  "contacts": {
+   "chromophore_edge": 13
+  },
+  "buried_density": 96,
+  "anchor": false
+ },
+ "204": {
+  "dominant_class": "buried",
+  "min_dist": 5.27,
+  "contacts": {},
+  "buried_density": 87,
+  "anchor": false
+ },
+ "205": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 4.26,
+  "contacts": {
+   "chromophore_edge": 1
+  },
+  "buried_density": 94,
+  "anchor": false
+ },
+ "206": {
+  "dominant_class": "buried",
+  "min_dist": 8.74,
+  "contacts": {},
+  "buried_density": 70,
+  "anchor": false
+ },
+ "207": {
+  "dominant_class": "buried",
+  "min_dist": 8.2,
+  "contacts": {},
+  "buried_density": 72,
+  "anchor": false
+ },
+ "208": {
+  "dominant_class": "surface",
+  "min_dist": 12.12,
+  "contacts": {},
+  "buried_density": 57,
+  "anchor": false
+ },
+ "209": {
+  "dominant_class": "surface",
+  "min_dist": 14.84,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "210": {
+  "dominant_class": "surface",
+  "min_dist": 16.01,
+  "contacts": {},
+  "buried_density": 62,
+  "anchor": false
+ },
+ "211": {
+  "dominant_class": "surface",
+  "min_dist": 19.14,
+  "contacts": {},
+  "buried_density": 38,
+  "anchor": false
+ },
+ "212": {
+  "dominant_class": "surface",
+  "min_dist": 20.89,
+  "contacts": {},
+  "buried_density": 41,
+  "anchor": false
+ },
+ "213": {
+  "dominant_class": "surface",
+  "min_dist": 17.21,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "214": {
+  "dominant_class": "surface",
+  "min_dist": 20.62,
+  "contacts": {},
+  "buried_density": 46,
+  "anchor": false
+ },
+ "215": {
+  "dominant_class": "surface",
+  "min_dist": 17.81,
+  "contacts": {},
+  "buried_density": 67,
+  "anchor": false
+ },
+ "216": {
+  "dominant_class": "buried",
+  "min_dist": 15.06,
+  "contacts": {},
+  "buried_density": 86,
+  "anchor": false
+ },
+ "217": {
+  "dominant_class": "buried",
+  "min_dist": 12.82,
+  "contacts": {},
+  "buried_density": 101,
+  "anchor": false
+ },
+ "219": {
+  "dominant_class": "buried",
+  "min_dist": 9.23,
+  "contacts": {},
+  "buried_density": 88,
+  "anchor": false
+ },
+ "220": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 3.72,
+  "contacts": {
+   "chromophore_edge": 3
+  },
+  "buried_density": 93,
+  "anchor": false
+ },
+ "221": {
+  "dominant_class": "buried",
+  "min_dist": 7.82,
+  "contacts": {},
+  "buried_density": 88,
+  "anchor": false
+ },
+ "222": {
+  "dominant_class": "chromophore_edge",
+  "min_dist": 2.81,
+  "contacts": {
+   "chromophore_edge": 14
+  },
+  "buried_density": 93,
+  "anchor": false
+ },
+ "223": {
+  "dominant_class": "buried",
+  "min_dist": 7.09,
+  "contacts": {},
+  "buried_density": 90,
+  "anchor": false
+ },
+ "224": {
+  "dominant_class": "buried",
+  "min_dist": 5.88,
+  "contacts": {},
+  "buried_density": 97,
+  "anchor": false
+ },
+ "225": {
+  "dominant_class": "buried",
+  "min_dist": 9.75,
+  "contacts": {},
+  "buried_density": 89,
+  "anchor": false
+ },
+ "226": {
+  "dominant_class": "buried",
+  "min_dist": 11.71,
+  "contacts": {},
+  "buried_density": 97,
+  "anchor": false
+ },
+ "227": {
+  "dominant_class": "buried",
+  "min_dist": 12.91,
+  "contacts": {},
+  "buried_density": 76,
+  "anchor": false
+ },
+ "228": {
+  "dominant_class": "surface",
+  "min_dist": 15.31,
+  "contacts": {},
+  "buried_density": 45,
+  "anchor": false
+ },
+ "229": {
+  "dominant_class": "surface",
+  "min_dist": 17.34,
+  "contacts": {},
+  "buried_density": 46,
+  "anchor": false
+ }
+}

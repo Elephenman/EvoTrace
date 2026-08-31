@@ -1,0 +1,62 @@
+  [v1 s11] round 20 budget=136 T=0.80
+    micro: batch=813 new=24 queries=136
+    micro: hits=2 budget=138
+  [v1 s11] round 40 budget=155 T=0.80
+    micro: batch=796 new=24 queries=155
+    micro: hits=0 budget=155
+  [v1 s11] round 60 budget=163 T=0.80
+    micro: batch=849 new=24 queries=163
+    micro: hits=0 budget=163
+  [v1 s11] round 80 budget=166 T=0.80
+    micro: batch=780 new=24 queries=166
+    micro: hits=0 budget=166
+  [v1 s11] round 100 budget=167 T=0.80
+    micro: batch=835 new=24 queries=167
+    micro: hits=0 budget=167
+  [v1 s11] round 120 budget=171 T=0.80
+    micro: batch=826 new=21 queries=171
+    micro: hits=0 budget=171
+  [v1 s11] round 140 budget=171 T=0.80
+    micro: batch=823 new=21 queries=171
+    micro: hits=0 budget=171
+  [v1 s11] round 160 budget=171 T=0.80
+    micro: batch=846 new=21 queries=171
+    micro: hits=0 budget=171
+  [v1 s11] round 180 budget=172 T=0.80
+    micro: batch=829 new=20 queries=172
+    micro: hits=0 budget=172
+  [v1 s11] round 200 budget=172 T=0.80
+    micro: batch=823 new=20 queries=172
+    micro: hits=0 budget=172
+  [v1 s11] round 220 budget=173 T=0.80
+    micro: batch=825 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round 240 budget=173 T=0.80
+    micro: batch=816 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round 260 budget=173 T=0.80
+    micro: batch=829 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round 280 budget=173 T=0.80
+    micro: batch=827 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round 300 budget=173 T=0.80
+    micro: batch=795 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round 320 budget=173 T=0.80
+    micro: batch=824 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round 340 budget=173 T=0.80
+    micro: batch=794 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round 360 budget=173 T=0.80
+    micro: batch=831 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round 380 budget=173 T=0.80
+    micro: batch=800 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round 400 budget=173 T=0.80
+    micro: batch=814 new=19 queries=173
+    micro: hits=0 budget=173
+  [v1 s11] round cap hit
+v1 done 173

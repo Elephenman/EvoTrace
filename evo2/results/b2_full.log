@@ -1,0 +1,18 @@
+train 4783 singles; transfer Deng=4996 Stiffler=4996 Jacquier=989
+[B=192 s=11] v2 rho=0.323 ridge rho=0.029 best=1.43 (26.1s)
+[B=192 s=22] v2 rho=0.324 ridge rho=0.030 best=1.64 (27.2s)
+[B=192 s=33] v2 rho=0.322 ridge rho=0.027 best=1.64 (27.4s)
+[B=192 s=44] v2 rho=0.329 ridge rho=0.029 best=1.64 (26.9s)
+[B=192 s=55] v2 rho=0.323 ridge rho=0.024 best=1.54 (23.4s)
+[B=192 s=66] v2 rho=0.327 ridge rho=0.022 best=1.64 (23.8s)
+[B=192 s=77] v2 rho=0.317 ridge rho=0.026 best=1.64 (23.6s)
+[B=192 s=88] v2 rho=0.311 ridge rho=0.028 best=1.64 (26.2s)
+[B=768 s=11] v2 rho=0.324 ridge rho=0.219 best=1.64 (275.1s)
+[B=768 s=22] v2 rho=0.331 ridge rho=0.204 best=1.70 (279.2s)
+[B=768 s=33] v2 rho=0.335 ridge rho=0.208 best=1.70 (269.8s)
+[B=768 s=44] v2 rho=0.337 ridge rho=0.220 best=1.64 (287.5s)
+[B=768 s=55] v2 rho=0.334 ridge rho=0.209 best=1.64 (284.0s)
+[B=768 s=66] v2 rho=0.332 ridge rho=0.213 best=1.70 (311.3s)
+[B=768 s=77] v2 rho=0.335 ridge rho=0.222 best=1.70 (386.6s)
+[B=768 s=88] v2 rho=0.327 ridge rho=0.212 best=1.64 (272.6s)
+B2 done

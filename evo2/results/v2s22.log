@@ -1,0 +1,1 @@
+v2 s22 done: {'strategy': 'v2', 'seed': 22, 'budget_target': 192, 'budget_used': 192, 'spearman_test': 0.3647, 'spearman_train': 0.0883, 'top16_test': 2.205, 'wall_s': 1.1} 1.2 s

@@ -1,0 +1,29 @@
+# ===== EvoTrace：只上传工具代码，不上传数据 =====
+# 用户明确：上传的是"工具"，不是原始数据/战役产物
+
+# 原始数据 / 战役数据（体积大、第三方可再下载、未发表）
+/evo_data/
+/ppri_evo/
+/out/
+/.v2c/
+/.video_agent/
+/.workbuddy/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# ESM3 零样本打分中间产物（含 ~9 万 fasta 序列）
+/evo2/results/esm3/
+
+# 集群批处理 payload（~9 万 fasta 中间产物）
+/evo2/cluster/payload/
+
+# 大二进制中间产物（Boltz/ESM 输出，已在 ppri_evo 排除；此处兜底）
+*.npz
+*.cif
+*.a3m
+*.ckpt
+*.pt
+*.bin

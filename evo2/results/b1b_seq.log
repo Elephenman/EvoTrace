@@ -1,0 +1,4 @@
+v2 {'strategy': 'v2', 'seed': 11, 'budget_target': 1536, 'budget_used': 1536, 'spearman_test': 0.766, 'spearman_train': 0.4934, 'top16_test': 4.317} 10.5 s
+v1 {'strategy': 'v1', 'seed': 11, 'budget_target': 1536, 'budget_used': 185, 'spearman_test': 0.1402, 'spearman_train': 0.2611, 'top16_test': 0.003} 38.7 s
+random {'strategy': 'random', 'seed': 11, 'budget_target': 1536, 'budget_used': 1536, 'spearman_test': nan, 'spearman_train': nan, 'top16_test': 1.214} 0.0 s
+ridge-AL {'strategy': 'ridge-AL', 'seed': 11, 'budget_target': 1536, 'budget_used': 1536, 'spearman_test': 0.7399, 'spearman_train': 0.3059, 'top16_test': 5.198} 38.2 s
