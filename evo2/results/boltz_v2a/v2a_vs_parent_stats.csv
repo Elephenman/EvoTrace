@@ -1,0 +1,3 @@
+cand,parent,act_S1,act_S1_lo,act_S1_hi,act_OFF,d_act,parent_d_act,dual_S1,dual_S1_lo,dual_S1_hi,parent_dual_S1,iface_S1,iface_OFF,d_iface,d_iface_sem,z_iface,parent_d_iface,ntcov_S1,ntcov_OFF,d_m255_23_S1,ligiptm_S1
+TrackF_r1_M255I,TrackF_r1,0.9,0.699,0.972,0.65,0.25,0.1,0.5,0.299,0.701,0.45,40.9,31.1,9.7,2.2,4.33,12.9,15.0,12.7,16.97,0.9871
+HQL2_M255I,HQL2,0.8,0.584,0.919,0.85,-0.05,0.3,0.75,0.531,0.888,0.85,41.8,35.4,6.4,1.3,4.78,11.2,14.4,14.1,4.51,0.985
