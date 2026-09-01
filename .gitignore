@@ -9,6 +9,9 @@
 /.video_agent/
 /.workbuddy/
 
+# 临时诊断/调试脚本（2026-09-01 从根目录移入，非交付物）
+/scratch/
+
 # Python 缓存
 __pycache__/
 *.pyc
