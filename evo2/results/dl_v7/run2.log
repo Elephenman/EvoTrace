@@ -1,0 +1,68 @@
+A:\claudework\evo2\benchmarks\train_dl_v7.py:54: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  df = df.groupby(["system", "condition"], group_keys=False).apply(
+[rows] 2960 行, 37 系统
+[cells] 74
+A:\claudework\evo2\benchmarks\train_dl_v5.py:154: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+[LOO] 1/37 (340s)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:154: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+[LOO] 6/37 (1592s)
+Traceback (most recent call last):
+  File "A:\claudework\evo2\benchmarks\train_dl_v7.py", line 165, in <module>
+    main()
+  File "A:\claudework\evo2\benchmarks\train_dl_v7.py", line 134, in main
+    pred = loo()
+           ^^^^^
+  File "A:\claudework\evo2\benchmarks\train_dl_v7.py", line 123, in loo
+    net, scalers = M.train_model(tr, toks, tr_g, 0, epochs=epochs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\claudework\evo2\benchmarks\train_dl_v5.py", line 206, in train_model
+    out = net(tb, db, gb, pad)
+          ^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\claudework\evo2\benchmarks\train_dl_v5.py", line 162, in forward
+    x = self.enc(x, src_key_padding_mask=pad)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\transformer.py", line 540, in forward
+    output = mod(
+             ^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\transformer.py", line 947, in forward
+    x = x + self._sa_block(
+            ^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\transformer.py", line 968, in _sa_block
+    x = self.self_attn(
+        ^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\modules\activation.py", line 1492, in forward
+    attn_output, attn_output_weights = F.multi_head_attention_forward(
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\functional.py", line 6478, in multi_head_attention_forward
+    q, k, v = _in_projection_packed(query, key, value, in_proj_weight, in_proj_bias)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\torch\nn\functional.py", line 5836, in _in_projection_packed
+    proj = linear(q, w, b)
+           ^^^^^^^^^^^^^^^
+RuntimeError: [enforce fail at alloc_cpu.cpp:117] data. DefaultCPUAllocator: not enough memory: you tried to allocate 10420224 bytes.

@@ -1,0 +1,88 @@
+[data] rows=2960 cells=74 systems=37 epochs=24
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+  [A1] LOO 5/37 (715s)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+  [A1] LOO 10/37 (1268s)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+  [A1] LOO 15/37 (1998s)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+  [A1] LOO 20/37 (2447s)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+  [A1] LOO 25/37 (3116s)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+  [A1] LOO 30/37 (3593s)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+  [A1] LOO 35/37 (4283s)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+  [A1] LOO 37/37 (4405s)
+  [A1] sep rho=+0.008 sign=0.95 top10=-0.293  (v4@n100 基准 +0.330/0.92)
+
+# v7 sep A/B 快速诊断 (epochs=24, seed=0)
+
+- 基准: v7 原版 sep −0.124 / v4@n100 sep +0.330
+
+- A1: sep rho **+0.008** sign **0.95** top10 **-0.293**

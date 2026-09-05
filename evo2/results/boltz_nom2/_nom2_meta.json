@@ -1,0 +1,242 @@
+{
+ "n2_WT_F88F_M255M": {
+  "background": "WT",
+  "F88": "F",
+  "M255": "M",
+  "n_mut": 0
+ },
+ "n2_WT_F88F_M255I": {
+  "background": "WT",
+  "F88": "F",
+  "M255": "I",
+  "n_mut": 1
+ },
+ "n2_WT_F88F_M255K": {
+  "background": "WT",
+  "F88": "F",
+  "M255": "K",
+  "n_mut": 1
+ },
+ "n2_WT_F88F_M255A": {
+  "background": "WT",
+  "F88": "F",
+  "M255": "A",
+  "n_mut": 1
+ },
+ "n2_WT_F88K_M255M": {
+  "background": "WT",
+  "F88": "K",
+  "M255": "M",
+  "n_mut": 1
+ },
+ "n2_WT_F88K_M255I": {
+  "background": "WT",
+  "F88": "K",
+  "M255": "I",
+  "n_mut": 2
+ },
+ "n2_WT_F88K_M255K": {
+  "background": "WT",
+  "F88": "K",
+  "M255": "K",
+  "n_mut": 2
+ },
+ "n2_WT_F88K_M255A": {
+  "background": "WT",
+  "F88": "K",
+  "M255": "A",
+  "n_mut": 2
+ },
+ "n2_WT_F88R_M255M": {
+  "background": "WT",
+  "F88": "R",
+  "M255": "M",
+  "n_mut": 1
+ },
+ "n2_WT_F88R_M255I": {
+  "background": "WT",
+  "F88": "R",
+  "M255": "I",
+  "n_mut": 2
+ },
+ "n2_WT_F88R_M255K": {
+  "background": "WT",
+  "F88": "R",
+  "M255": "K",
+  "n_mut": 2
+ },
+ "n2_WT_F88R_M255A": {
+  "background": "WT",
+  "F88": "R",
+  "M255": "A",
+  "n_mut": 2
+ },
+ "n2_WT_F88W_M255M": {
+  "background": "WT",
+  "F88": "W",
+  "M255": "M",
+  "n_mut": 1
+ },
+ "n2_WT_F88W_M255I": {
+  "background": "WT",
+  "F88": "W",
+  "M255": "I",
+  "n_mut": 2
+ },
+ "n2_WT_F88W_M255K": {
+  "background": "WT",
+  "F88": "W",
+  "M255": "K",
+  "n_mut": 2
+ },
+ "n2_WT_F88W_M255A": {
+  "background": "WT",
+  "F88": "W",
+  "M255": "A",
+  "n_mut": 2
+ },
+ "n2_WT_F88Y_M255M": {
+  "background": "WT",
+  "F88": "Y",
+  "M255": "M",
+  "n_mut": 1
+ },
+ "n2_WT_F88Y_M255I": {
+  "background": "WT",
+  "F88": "Y",
+  "M255": "I",
+  "n_mut": 2
+ },
+ "n2_WT_F88Y_M255K": {
+  "background": "WT",
+  "F88": "Y",
+  "M255": "K",
+  "n_mut": 2
+ },
+ "n2_WT_F88Y_M255A": {
+  "background": "WT",
+  "F88": "Y",
+  "M255": "A",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88F_M255M": {
+  "background": "TrackF_r1",
+  "F88": "F",
+  "M255": "M",
+  "n_mut": 1
+ },
+ "n2_TrackF_r1_F88F_M255I": {
+  "background": "TrackF_r1",
+  "F88": "F",
+  "M255": "I",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88F_M255K": {
+  "background": "TrackF_r1",
+  "F88": "F",
+  "M255": "K",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88F_M255A": {
+  "background": "TrackF_r1",
+  "F88": "F",
+  "M255": "A",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88K_M255M": {
+  "background": "TrackF_r1",
+  "F88": "K",
+  "M255": "M",
+  "n_mut": 0
+ },
+ "n2_TrackF_r1_F88K_M255I": {
+  "background": "TrackF_r1",
+  "F88": "K",
+  "M255": "I",
+  "n_mut": 1
+ },
+ "n2_TrackF_r1_F88K_M255K": {
+  "background": "TrackF_r1",
+  "F88": "K",
+  "M255": "K",
+  "n_mut": 1
+ },
+ "n2_TrackF_r1_F88K_M255A": {
+  "background": "TrackF_r1",
+  "F88": "K",
+  "M255": "A",
+  "n_mut": 1
+ },
+ "n2_TrackF_r1_F88R_M255M": {
+  "background": "TrackF_r1",
+  "F88": "R",
+  "M255": "M",
+  "n_mut": 1
+ },
+ "n2_TrackF_r1_F88R_M255I": {
+  "background": "TrackF_r1",
+  "F88": "R",
+  "M255": "I",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88R_M255K": {
+  "background": "TrackF_r1",
+  "F88": "R",
+  "M255": "K",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88R_M255A": {
+  "background": "TrackF_r1",
+  "F88": "R",
+  "M255": "A",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88W_M255M": {
+  "background": "TrackF_r1",
+  "F88": "W",
+  "M255": "M",
+  "n_mut": 1
+ },
+ "n2_TrackF_r1_F88W_M255I": {
+  "background": "TrackF_r1",
+  "F88": "W",
+  "M255": "I",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88W_M255K": {
+  "background": "TrackF_r1",
+  "F88": "W",
+  "M255": "K",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88W_M255A": {
+  "background": "TrackF_r1",
+  "F88": "W",
+  "M255": "A",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88Y_M255M": {
+  "background": "TrackF_r1",
+  "F88": "Y",
+  "M255": "M",
+  "n_mut": 1
+ },
+ "n2_TrackF_r1_F88Y_M255I": {
+  "background": "TrackF_r1",
+  "F88": "Y",
+  "M255": "I",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88Y_M255K": {
+  "background": "TrackF_r1",
+  "F88": "Y",
+  "M255": "K",
+  "n_mut": 2
+ },
+ "n2_TrackF_r1_F88Y_M255A": {
+  "background": "TrackF_r1",
+  "F88": "Y",
+  "M255": "A",
+  "n_mut": 2
+ }
+}

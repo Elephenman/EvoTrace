@@ -1,0 +1,7 @@
+A:\claudework\evo2\benchmarks\train_dl_v7.py:54: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  df = df.groupby(["system", "condition"], group_keys=False).apply(
+[rows] 2960 行, 37 系统
+[cells] 74
+[ckpt] 恢复 3 折
+A:\claudework\evo2\benchmarks\train_dl_v5.py:154: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)

@@ -1,0 +1,14 @@
+A:\claudework\evo2\benchmarks\train_dl_v7.py:35: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  df = df.groupby(["system", "condition"], group_keys=False).apply(
+[rows] 0 行, 0 系统
+[cells] 0
+[V1] y_act: +nan
+[V1] y_dual: +nan
+[V1] y_dcat: +nan
+Traceback (most recent call last):
+  File "A:\claudework\evo2\benchmarks\train_dl_v7.py", line 133, in <module>
+    main()
+  File "A:\claudework\evo2\benchmarks\train_dl_v7.py", line 119, in main
+    r_sep = M.spear(P[:, 1], P[:, 0])
+                    ~^^^^^^
+IndexError: too many indices for array: array is 1-dimensional, but 2 were indexed

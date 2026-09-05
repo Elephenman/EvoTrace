@@ -1,0 +1,18 @@
+A:\claudework\evo2\benchmarks\train_dl_v5.py:59: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  pm = pm.groupby(["system", "condition"], group_keys=False).apply(
+[rows] 913 行, 63 系统, {'OFF_T_G17': 419, 'S1_G17': 419, 'GCA': 75}
+[feat] token (53, 368), global 160 维
+[cells] 151
+A:\claudework\evo2\benchmarks\train_dl_v5.py:154: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:154: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+[LOO] 3523s
+[V1] y_act: DL rho +0.401
+Traceback (most recent call last):
+  File "A:\claudework\evo2\benchmarks\train_dl_v5.py", line 363, in <module>
+    main()
+  File "A:\claudework\evo2\benchmarks\train_dl_v5.py", line 315, in main
+    report.append(f"- {c}: **{r:+.3f}**  (集成 σ={pstd[:,k].mean():.3f})")
+                                                  ~~~~^^^^^
+IndexError: too many indices for array: array is 1-dimensional, but 2 were indexed

@@ -1,0 +1,58 @@
+A:\claudework\evo2\benchmarks\train_dl_v7_par.py:94: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  df = df.groupby(["system", "condition"], group_keys=False).apply(
+[rows] 2960 行, 37 系统
+[cells] 74  系统数=37
+[ckpt] 主 ckpt 恢复 17 折
+[ckpt] 已恢复 17 折预测
+[plan] 待训练折: [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+[LOO] f18 完成 (308s, 剩 19)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+[LOO] f17 完成 (310s, 剩 18)
+[LOO] f19 完成 (522s, 剩 17)
+[LOO] f20 完成 (524s, 剩 16)
+[LOO] f21 完成 (732s, 剩 15)
+[LOO] f22 完成 (735s, 剩 14)
+[LOO] f23 完成 (942s, 剩 13)
+[LOO] f24 完成 (945s, 剩 12)
+[LOO] f25 完成 (1154s, 剩 11)
+[LOO] f26 完成 (1157s, 剩 10)
+[LOO] f27 完成 (1367s, 剩 9)
+[LOO] f28 完成 (1370s, 剩 8)
+[LOO] f29 完成 (1587s, 剩 7)
+[LOO] f30 完成 (1589s, 剩 6)
+[LOO] f31 完成 (1795s, 剩 5)
+[LOO] f32 完成 (1798s, 剩 4)
+[LOO] f33 完成 (2006s, 剩 3)
+[LOO] f34 完成 (2009s, 剩 2)
+[LOO] f35 完成 (2218s, 剩 1)
+[LOO] f36 完成 (2219s, 剩 0)
+[LOO] 全部完成 2219s
+[V1] y_act: +0.770
+[V1] y_dual: +0.838
+[V1] y_dcat: +0.748
+[V1b] sep rho=-0.124 sign=0.95 top10=-0.402 nsys=37
+
+# DL v7 并行版 —— n=100 干净标签 + 变体专属表征
+
+rows=2960, cells=74, systems=37, dev=cpu, epochs=24, threads=2
+
+## V1 按系统 LOO（v4@n100 基准: act +0.739 / dual +0.747 / dcat —）
+
+- y_act: **+0.770**
+- y_dual: **+0.838**
+- y_dcat: **+0.748**
+
+## V1b sep（v4@n100 基准: rho +0.330 / 符号 0.92）
+
+- 系统数=37, 全量 **-0.124**, 符号 **0.95**, top10 **-0.402**
+
+## 对 v4@n100 基准的判决
+
+- V1 act : v7 +0.770  vs 基准 +0.739  → ✓
+- V1 dual: v7 +0.838  vs 基准 +0.747  → ✓
+- V1 sep : v7 rho -0.124/符号 0.95  vs 基准 +0.330/0.92  → ✗
+- **判决: REVIEW**（V1 act/dual 达基准且 sep 不弱于基准则为 PASS）
+[out] A:/claudework/evo2/results/dl_v7/report.md

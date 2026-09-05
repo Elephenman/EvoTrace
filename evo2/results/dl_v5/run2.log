@@ -1,0 +1,33 @@
+A:\claudework\evo2\benchmarks\train_dl_v5.py:59: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  pm = pm.groupby(["system", "condition"], group_keys=False).apply(
+[rows] 1288 行, 63 系统, {'OFF_T_G17': 544, 'S1_G17': 544, 'GCA': 200}
+[feat] token (53, 368), global 160 维
+[cells] 151
+A:\claudework\evo2\benchmarks\train_dl_v5.py:154: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+[LOO] seed0 fold 1/63 (140s)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:154: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+[LOO] seed0 fold 11/63 (1411s)
+[LOO] seed0 fold 21/63 (2349s)
+[LOO] seed0 fold 31/63 (3185s)
+[LOO] seed0 fold 41/63 (4002s)
+[LOO] seed0 fold 51/63 (4885s)
+[LOO] seed0 fold 61/63 (5700s)
+[LOO] seed0 fold 63/63 (5861s)
+Traceback (most recent call last):
+  File "A:\claudework\evo2\benchmarks\train_dl_v5.py", line 380, in <module>
+    main()
+  File "A:\claudework\evo2\benchmarks\train_dl_v5.py", line 324, in main
+    pmean, pstd = loo()
+                  ^^^^^
+  File "A:\claudework\evo2\benchmarks\train_dl_v5.py", line 321, in loo
+    return pred.mean(2), pred.std(2).mean(axis=(0, 2))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\numpy\_core\_methods.py", line 123, in _mean
+    rcount = _count_reduce_items(arr, axis, keepdims=keepdims, where=where)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "A:\Python\Lib\site-packages\numpy\_core\_methods.py", line 86, in _count_reduce_items
+    items *= arr.shape[mu.normalize_axis_index(ax, arr.ndim)]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+numpy.exceptions.AxisError: axis 2 is out of bounds for array of dimension 2

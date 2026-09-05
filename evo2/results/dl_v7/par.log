@@ -1,0 +1,21 @@
+A:\claudework\evo2\benchmarks\train_dl_v7_par.py:94: DeprecationWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  df = df.groupby(["system", "condition"], group_keys=False).apply(
+[rows] 2960 行, 37 系统
+[cells] 74  系统数=37
+[ckpt] 主 ckpt 恢复 7 折
+[ckpt] 已恢复 7 折预测
+[plan] 待训练折: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+[LOO] f8 完成 (168s, 剩 29)
+[LOO] f7 完成 (168s, 剩 28)
+A:\claudework\evo2\benchmarks\train_dl_v5.py:165: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.enc = nn.TransformerEncoder(layer, nl)
+[LOO] f10 完成 (332s, 剩 27)
+[LOO] f9 完成 (332s, 剩 26)
+[LOO] f12 完成 (496s, 剩 25)
+[LOO] f11 完成 (496s, 剩 24)
+[LOO] f14 完成 (658s, 剩 23)
+[LOO] f13 完成 (659s, 剩 22)
+[LOO] f15 完成 (820s, 剩 21)
+[LOO] f16 完成 (821s, 剩 20)
