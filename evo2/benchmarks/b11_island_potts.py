@@ -71,22 +71,31 @@ def run_mean_dist(pm, anc21, T, m, n_gen=600, n_pop=2, ne=200, seed=SEED):
     return float(d.mean())
 
 
-def paircorr_dist(mat, min_obs=10):
-    """逐可变位点对算 Pearson 相关系数, 返回 [n_pairs] 相关系数数组。
-
-    与 pair_distances 同口径: 掩码列(31)逐对剔除。用于 P1-2 二阶统计判决——
-    比较回放样本与实测样本的"成对位点相关性分布"。"""
+def pair_support(mat, min_obs=10):
+    """通过 min_obs 门限的位点对列表（gap=31 掩码, 逐对剔除）。"""
     K = mat.shape[1]
-    out = []
+    pairs = []
     for i in range(K):
         for j in range(i + 1, K):
-            a, b = mat[:, i], mat[:, j]
-            ok = (a != 31) & (b != 31)
-            if ok.sum() < min_obs:
-                continue
-            av, bv = a[ok].astype(np.float64), b[ok].astype(np.float64)
-            if av.std() < 1e-9 or bv.std() < 1e-9:
-                continue
+            ok = (mat[:, i] != 31) & (mat[:, j] != 31)
+            if ok.sum() >= min_obs:
+                pairs.append((i, j))
+    return pairs
+
+
+def paircorr_values(mat, pairs):
+    """在给定共享位点对集合上算 Pearson r（P2-a: 两分布必须同对集合）。
+
+    常数列（std≈0）对记 r=0 而非剔除——保证 sim/der 逐对可比、
+    两分布样本量严格一致。用于 P1-2 二阶统计判决。"""
+    out = []
+    for i, j in pairs:
+        a, b = mat[:, i], mat[:, j]
+        ok = (a != 31) & (b != 31)
+        av, bv = a[ok].astype(np.float64), b[ok].astype(np.float64)
+        if av.std() < 1e-9 or bv.std() < 1e-9:
+            out.append(0.0)
+        else:
             out.append(float(np.corrcoef(av, bv)[0, 1]))
     return np.array(out, dtype=float) if out else np.array([0.0])
 
@@ -203,9 +212,11 @@ def main(substring="", force_lam=None):
     ks_in = ks_2samp(d_sim, d_anc)
     ks_der = ks_2samp(d_sim, d_der)
     rho = float(spearmanr(site_entropy(sim), site_entropy(der)).statistic)
-    # P1-2: 盲测 derived 半上, 回放样本 vs 实测样本的成对位点相关性分布 KS
-    pc_sim = paircorr_dist(sim)
-    pc_der = paircorr_dist(der)
+    # P1-2 + P2-a: 盲测 derived 半上, 回放 vs 实测的成对位点相关性分布 KS
+    # （共享位点对集合 = 两侧 support 交集, 保证两分布逐对可比、样本量一致）
+    pc_pairs = sorted(set(pair_support(sim)) & set(pair_support(der)))
+    pc_sim = paircorr_values(sim, pc_pairs)
+    pc_der = paircorr_values(der, pc_pairs)
     ks_pc = ks_2samp(pc_sim, pc_der)
     verdict = "PASS" if (ks_der.pvalue > 0.05 and rho > 0 and ks_pc.pvalue > 0.05) \
         else "REVIEW"
@@ -262,6 +273,8 @@ def main(substring="", force_lam=None):
 λ/T/m 校准均在短程小尺度（n_pop=2/ne=200/n_gen=600–800）完成, 终跑尺度
 （n_pop=8/ne=500/n_gen=2000）更大, 平衡分布存在尺度外推风险; 若终跑 KS 不过
 则回炉重做校准, 过门结论须谨慎解读。
+另: 迁移率 m 在 λ 校准与 T 校准期被钉死为 0.005, m 的网格选择是在 λ/T 已冻结
+前提下进行的——三者未做联合搜索, 耦合选择的最优组合可能被序列化决策错过。
 """
     with open(os.path.join(OUT, f"report_{fam_tag}.md"), "w", encoding="utf-8") as f:
         f.write(report)
