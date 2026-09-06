@@ -88,35 +88,10 @@ def onehot(mat21):
     return F
 
 
-def fit_plm(mat21, rng):
-    """伪似然 DCA: 逐位点 softmax 回归。返回 Wfull [K, K*Q+1, Q]
-    （前 K*Q 行 = 特征权重, 末行 = 场 h_i; 自身位点块在返回前置零）。"""
-    N, K = mat21.shape
-    D = K * Q
-    F = onehot(mat21)
-    Wfull = np.zeros((K, D + 1, Q), dtype=np.float32)
-    t0 = time.time()
-    for i in range(K):
-        others = np.concatenate([np.arange(0, i * Q), np.arange((i + 1) * Q, D)])
-        Xi = np.hstack([F[:, others], np.ones((N, 1), dtype=np.float32)])
-        Yi = np.zeros((N, Q), dtype=np.float32)
-        Yi[np.arange(N), mat21[:, i]] = 1.0
-        W = np.zeros((Xi.shape[1], Q), dtype=np.float32)
-        m1 = np.zeros_like(W); m2 = np.zeros_like(W)
-        for ep in range(EPOCHS):
-            Z = Xi @ W
-            Z -= Z.max(axis=1, keepdims=True)
-            P = np.exp(Z); P /= P.sum(axis=1, keepdims=True)
-            G = Xi.T @ (P - Yi) / N + LAM * W
-            m1 = 0.9 * m1 + 0.1 * G
-            m2 = 0.999 * m2 + 0.001 * G * G
-            W -= LR * (m1 / (np.sqrt(m2) + 1e-8)) / (1 - 0.9 ** (ep + 1))
-        # 写回全谱权重矩阵（排除自身位点块）
-        Wfull[i, others, :] = W[:-1, :]
-        Wfull[i, D, :] = W[-1, :]
-        if (i + 1) % 12 == 0 or i == K - 1:
-            print(f"    site {i+1}/{K}（{time.time()-t0:.0f}s）")
-    return Wfull
+# v2 推断修正（2026-09-06）: fit_plm 收编进 engine.potts——原内嵌版 Adam 缺
+# m2 偏差修正（首步等效步长放大 ~30x, 近最优区振荡）, 推断质量存疑。
+# 本文件重跑后 b10 结果 = v2 口径, 与提案证据表同步。
+from engine.potts import fit_plm  # noqa: E402
 
 
 def gibbs_sample(Wfull, init21, rng):
@@ -180,7 +155,8 @@ def main(substring="", lam=LAM):
     all21 = np.where(mat == 31, 20, mat).astype(np.int8)
 
     print(f"[3] 伪似然 DCA 拟合（N={len(mat21)}, epochs={EPOCHS}, λ={LAM}）")
-    Wfull = fit_plm(mat21, rng)
+    Wfull = fit_plm(mat21, Q=Q, epochs=EPOCHS, lam=LAM, lr=LR, seed=SEED,
+                    verbose=True)
 
     print(f"[4] Gibbs 平衡采样（{M_CHAINS} 链 × 烧入{BURN}+收集{COLLECT} 扫描）")
     init = mat21[rng.integers(0, len(mat21), M_CHAINS)]
