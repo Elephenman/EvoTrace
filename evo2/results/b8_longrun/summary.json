@@ -1,0 +1,81 @@
+{
+ "seed": 20260906,
+ "n_pop": 4,
+ "Ne": 1000,
+ "n_gen": 10000,
+ "T": 0.6,
+ "events": [
+  {
+   "type": "bottleneck",
+   "t_gen": 3000,
+   "duration_g": 50,
+   "factor": 0.05
+  },
+  {
+   "type": "migration",
+   "t_gen": 6000,
+   "duration_g": 10,
+   "donor": null,
+   "fraction": 0.3
+  },
+  {
+   "type": "temperature_shift",
+   "t_gen": 7000,
+   "duration_g": 3000,
+   "to_T": 1.2
+  }
+ ],
+ "landscape": {
+  "measured": 149361,
+  "additive_filled": 10639,
+  "y_wt": 1.0
+ },
+ "cache": {
+  "new_entries": 159999,
+  "cold_build_s": 9.37,
+  "warm_query_1000_ms": 358.6,
+  "warm_hit_rate": 1.0
+ },
+ "run": {
+  "wall_s": 254.4,
+  "total_inds": 40000000,
+  "unique_genotypes": 9375,
+  "repetition_rate": 0.999766,
+  "fixation_events": 20,
+  "parallel_repeats": 5
+ },
+ "best_final": {
+  "fitness": 8.762,
+  "muts": [
+   "38F",
+   "39W",
+   "40A",
+   "53A"
+  ]
+ },
+ "replay": {
+  "seed": 20260906,
+  "config": {
+   "mutations_per_genome_per_gen": {
+    "lambda": 0.4
+   },
+   "T": 0.6,
+   "n_mut_max": 12
+  },
+  "sites": [
+   38,
+   39,
+   40,
+   53
+  ],
+  "wt_aas": "VDGV",
+  "note": "seed+config+sites 唯一决定轨迹; 景观表由 DMS CSV 版本决定"
+ },
+ "files": {
+  "edges": "A:\\claudework\\evo2\\results\\b8_longrun\\run1_edges.csv",
+  "timeline": "A:\\claudework\\evo2\\results\\b8_longrun\\run1_timeline.json",
+  "report": "A:\\claudework\\evo2\\results\\b8_longrun\\run1_report.md",
+  "newick": "A:\\claudework\\evo2\\results\\b8_longrun\\run1_tree.newick",
+  "ascii_tree": "A:\\claudework\\evo2\\results\\b8_longrun\\run1_tree.txt"
+ }
+}

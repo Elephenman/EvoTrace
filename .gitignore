@@ -30,3 +30,4 @@ __pycache__/
 *.ckpt
 *.pt
 *.bin
+evo2/results/b8_longrun/landscape_cache.db

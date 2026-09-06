@@ -141,17 +141,80 @@ class LineageRecorder:
         return edges
 
     # ---------------------------------------------------------------- 导出
+    def _tree_maps(self) -> Tuple[Dict[str, Optional[str]], Dict[Optional[str], List[str]]]:
+        """边表 → (child→parent, parent→children) 映射（每次导出时构建, 万级边表毫秒级）。"""
+        parent_of: Dict[str, Optional[str]] = {}
+        children_of: Dict[Optional[str], List[str]] = {}
+        for _, h, p in self.build_lineage():
+            parent_of[h] = p
+            children_of.setdefault(p, []).append(h)
+        return parent_of, children_of
+
+    def _keep_set(self, top_k: int,
+                  parent_of: Dict[str, Optional[str]]) -> set:
+        """保留集: 按累计频率取 top_k 基因型, 再补齐其全部祖先到根——
+        保证导出的子树对每个入选叶都连通（"主干谱系"的正确定义）。"""
+        ranked = sorted(self._total_freq.items(), key=lambda kv: -kv[1])
+        keep: set = set()
+        for h, _ in ranked[:max(top_k, 0)]:
+            if h not in self._seen:
+                continue
+            keep.add(h)
+            cur = parent_of.get(h)
+            while cur is not None and cur not in keep:
+                keep.add(cur)
+                cur = parent_of.get(cur)
+        return keep
+
+    def _label_of(self, h: str) -> str:
+        muts = self.muts_of(h)
+        return "_".join(f"{s}{a}" for s, a in muts) or "WT"
+
     def to_newick(self, top_k: int = 12) -> str:
-        """主干谱系的简化 Newick（按首次出现代排列的链式树, 叶标 = 突变串）。"""
-        edges = self.build_lineage()
-        edges.sort(key=lambda e: e[0])
-        label = {}
-        for g, h, parent in edges[:top_k]:
-            muts = self.muts_of(h)
-            label[h] = "_".join(f"{s}{a}" for s, a in muts) or "WT"
-        seq = ["("]
-        items = [label[h] for g, h, p in edges[:top_k] if h in label]
-        return "(" + ",".join(items) + ");"
+        """主干谱系 Newick（按累计频率取 top_k 叶 + 全部祖先, 真树结构非平铺链）。
+
+        叶/内节点标 = 突变串（内部节点标符合 Newick 规范）; 分支长度 =
+        子节点与父节点首次出现代之差（根分支 = 自身首现代）。
+        """
+        parent_of, children_of = self._tree_maps()
+        keep = self._keep_set(top_k, parent_of)
+
+        def rec(h: str, is_root: bool) -> str:
+            kids = sorted((c for c in children_of.get(h, []) if c in keep),
+                          key=lambda c: self._seen.get(c, 0))
+            if kids:
+                base = self._seen[h]
+                body = "(" + ",".join(
+                    rec(c, False) + f":{max(self._seen[c] - base, 0)}" for c in kids) + ")"
+            else:
+                body = ""
+            return body + self._label_of(h)
+
+        roots = sorted((c for c in children_of.get(None, []) if c in keep),
+                       key=lambda c: self._seen.get(c, 0))
+        inner = ",".join(rec(r, True) + f":{self._seen[r]}" for r in roots)
+        return "(" + inner + ");"
+
+    def to_ascii_tree(self, top_k: int = 12) -> str:
+        """主干谱系 ASCII 渲染（同一保留集, 缩进树; 节点注 首现代/累计频率）。"""
+        parent_of, children_of = self._tree_maps()
+        keep = self._keep_set(top_k, parent_of)
+        lines: List[str] = []
+
+        def rec(h: Optional[str], prefix: str) -> None:
+            kids = sorted((c for c in children_of.get(h, []) if c in keep),
+                          key=lambda c: self._seen.get(c, 0))
+            for i, c in enumerate(kids):
+                last = (i == len(kids) - 1)
+                conn = "`- " if last else "|- "
+                lines.append(f"{prefix}{conn}{self._label_of(c)} "
+                             f"[gen {self._seen[c]}, n {self._total_freq.get(c, 0)}]")
+                rec(c, prefix + ("   " if last else "|  "))
+
+        roots = sorted((c for c in children_of.get(None, []) if c in keep),
+                       key=lambda c: self._seen.get(c, 0))
+        rec(None, "")
+        return "\n".join(lines)
 
     def muts_of(self, h: str) -> List[Tuple[int, str]]:
         if self._wt is None or h not in self._genos:
@@ -196,8 +259,9 @@ class LineageRecorder:
             lines.append(f"| {name} | {gpy} | {max_gen / gpy:.1f} |")
         return "\n".join(lines) + "\n"
 
-    def save(self, out_prefix: str) -> Dict[str, str]:
-        """落盘三件套: <prefix>_edges.csv / _timeline.json / _report.md。"""
+    def save(self, out_prefix: str, tree_top_k: int = 12) -> Dict[str, str]:
+        """落盘五件套: <prefix>_edges.csv / _timeline.json / _report.md /
+        _tree.newick / _tree.txt（ASCII 树）。"""
         edges = self.build_lineage()
         with open(out_prefix + "_edges.csv", "w", encoding="utf-8") as f:
             f.write("first_gen,child,parent\n")
@@ -210,6 +274,11 @@ class LineageRecorder:
                            cache_hit_rate=self.cache_hit_rate), f, indent=1)
         with open(out_prefix + "_report.md", "w", encoding="utf-8") as f:
             f.write(self.narrative_report())
+        with open(out_prefix + "_tree.newick", "w", encoding="utf-8") as f:
+            f.write(self.to_newick(tree_top_k) + "\n")
+        with open(out_prefix + "_tree.txt", "w", encoding="utf-8") as f:
+            f.write(self.to_ascii_tree(tree_top_k) + "\n")
         return {k: out_prefix + s for k, s in
                 (("edges", "_edges.csv"), ("timeline", "_timeline.json"),
-                 ("report", "_report.md"))}
+                 ("report", "_report.md"), ("newick", "_tree.newick"),
+                 ("ascii_tree", "_tree.txt"))}

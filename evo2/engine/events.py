@@ -82,13 +82,31 @@ def _interp_prior_table(a: np.ndarray, b: np.ndarray, frac: float) -> np.ndarray
     return t / t.sum(axis=1, keepdims=True)
 
 
+def _wf_step(kernel, geno: np.ndarray, Ne: int) -> np.ndarray:
+    """单代 Wright-Fisher 步, 与 kernel.run 内循环同口径
+    （不直接调 kernel.run: 其 founder 平铺语义只支持单行 founder, 且我们要在
+    代边界做瓶颈收缩/恢复——kernel 保持零改动）。"""
+    fits = kernel._fitness(geno)
+    ws = np.exp((fits - fits.max()) / kernel.T)
+    ws /= ws.sum()
+    parents = kernel.rng.choice(len(geno), size=Ne, p=ws)
+    children = geno[parents].copy()
+    if kernel.measured is not None:
+        children = kernel._draw_walk(children)
+    else:
+        children = kernel._draw_mutations(children)
+        children = kernel._enforce_load(children)
+    return children
+
+
 def run_with_events(kernel, script: EventScript, n_pop: int = 8, n_gen: int = 1000,
                     Ne: int = 500, pops0: Optional[np.ndarray] = None,
                     observer: Optional[Callable[[int, np.ndarray, List[dict]], None]] = None):
     """带事件脚本的长时程驱动器。返回 (all_stats, pops, event_log)。
 
-    每代每种群独立 kernel.run(n_pop=1, n_gen=1)（保持平行种群谱系不串）;
-    事件在代边界应用; observer 每代收到 (gen, pops[n_pop,Ne,L], 该代 stats)。
+    逐代驱动（事件在代边界应用）: 瓶颈代种群收缩为 Ne×factor 并在代末恢复,
+    环境渐变经 kernel.set_prior_table（M4 回流同一入口）, 温度台阶改 kernel.T,
+    迁移按比例注入供体基因型。observer 每代收到 (gen, pops[n_pop,Ne,L], stats)。
     """
     if pops0 is None:
         pops = np.tile(kernel.wt_idx[None, None, :], (n_pop, Ne, 1))
@@ -127,17 +145,11 @@ def run_with_events(kernel, script: EventScript, n_pop: int = 8, n_gen: int = 10
             kernel.T = cur_t
         gen_stats: List[dict] = []
         for p in range(n_pop):
-            # 瓶颈: 抽 cur_ne 个体为奠基者; 恢复: 复制回 Ne
-            founders = pops[p][kernel.rng.choice(Ne, size=cur_ne, replace=False)]
-            if cur_ne != Ne:
+            geno = _wf_step(kernel, pops[p], cur_ne)   # 瓶颈代收缩为 cur_ne
+            if cur_ne != Ne:                            # 代末恢复种群规模
                 rep = kernel.rng.choice(cur_ne, size=Ne - cur_ne)
-                founders = np.vstack([founders, founders[rep]])
-            else:
-                founders = pops[p]
-            _, newpop = kernel.run(n_pop=1, n_gen=1, Ne=Ne, founder=founders,
-                                   record_events=False)
-            pops[p] = newpop
-            geno = pops[p]
+                geno = np.vstack([geno, geno[rep]])
+            pops[p] = geno
             fits = kernel._fitness(geno)
             gen_stats.append(dict(pop=p, gen=g,
                                   best=round(float(fits.max()), 4),

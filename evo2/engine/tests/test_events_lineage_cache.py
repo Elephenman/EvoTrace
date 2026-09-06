@@ -162,8 +162,43 @@ def test_report_and_save(tmp_path):
     assert "进化轨迹叙事报告" in rep and "年轴三情景" in rep
     out = str(tmp_path / "run1")
     files = rec.save(out)
+    assert set(files) == {"edges", "timeline", "report", "newick", "ascii_tree"}
     for p in files.values():
         assert os.path.exists(p) and os.path.getsize(p) > 0
+
+
+def test_newick_and_ascii_tree_structure():
+    """R3: 真 Newick（括号配平/分支长度非负/叶全在树中）+ ASCII 缩进树。"""
+    import re
+    k = MiniKernel(L=4, seed=5)
+    rec = LineageRecorder(k.sites)
+    rec.set_wt(k.wt_idx)
+    run_with_events(k, EventScript([]), n_pop=2, n_gen=20, Ne=40, observer=rec.observe)
+    edges = dict((h, p) for _, h, p in rec.build_lineage())
+
+    nk = rec.to_newick(top_k=6)
+    assert nk.startswith("(") and nk.endswith(");")
+    depth = 0
+    for ch in nk:                                    # 括号配平
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        assert depth >= 0
+    assert depth == 0
+    for m in re.findall(r":(\d+)", nk):              # 分支长度 = 代差, 非负
+        assert int(m) >= 0
+    # 树中每个标签必须真实存在（标 = muts_of(h) 或 WT）; 按分隔符切分取词
+    valid_labels = {rec._label_of(h) for h in edges}
+    toks = {t for t in re.split(r"[(),:;]", nk) if t and not t.isdigit()}
+    assert toks and toks <= valid_labels
+
+    txt = rec.to_ascii_tree(top_k=6)
+    lines = [ln for ln in txt.splitlines() if ln.strip()]
+    assert len(lines) >= 2 and all("[gen " in ln for ln in lines)
+    # ASCII 与 Newick 同一保留集: 叶集合一致
+    ascii_labels = [ln.split("[gen")[0].split("- ", 1)[-1].strip() for ln in lines]
+    assert set(ascii_labels) <= valid_labels
 
 
 # ---------------- fitcache ----------------
