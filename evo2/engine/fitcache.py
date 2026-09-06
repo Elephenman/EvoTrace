@@ -61,6 +61,17 @@ class FitnessCache:
                  ) -> List[Optional[dict]]:
         return [self.get(m) for m in keys]
 
+    def put_many(self, items) -> None:
+        """批量回填（预计算阶段用, 单次 commit）。items: [(muts, value), ...]"""
+        rows = [(_norm_key(m), self.model_version, json.dumps(v)) for m, v in items]
+        self.db.executemany("INSERT OR REPLACE INTO cache VALUES (?,?,?)", rows)
+        self.db.commit()
+
+    def load_all(self) -> Dict[str, dict]:
+        """当前 model_version 的全量条目（预计算阶段先查内存, 免逐条 SELECT）。"""
+        return {k: json.loads(v) for k, v in self.db.execute(
+            "SELECT k, v FROM cache WHERE model=?", (self.model_version,))}
+
     def compute_through(self, muts: Iterable[Tuple[int, str]], compute) -> dict:
         """缓存穿透式调用: 命中返回缓存, 未命中调 compute(muts) 并回填。"""
         got = self.get(muts)

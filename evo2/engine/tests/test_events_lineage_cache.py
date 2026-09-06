@@ -31,6 +31,7 @@ class MiniKernel:
         self.lam = 0.5
         self._gen = 0
         self.events = []
+        self.measured = None
         self.sel = np.log(tab) - np.log(tab[np.arange(L), 0])[:, None]
 
     def set_prior_table(self, t):
@@ -40,6 +41,16 @@ class MiniKernel:
 
     def _fitness(self, geno):
         return self.sel[np.arange(self.L), geno.astype(int)].sum(axis=1)
+
+    def _draw_mutations(self, geno):
+        k = self.rng.poisson(self.lam, size=geno.shape[0])
+        for n in np.flatnonzero(k > 0):
+            for _ in range(int(k[n])):
+                geno[n, int(self.rng.integers(self.L))] = self.rng.integers(0, 20)
+        return geno
+
+    def _enforce_load(self, geno):
+        return geno
 
     def run(self, n_pop=1, n_gen=1, Ne=100, founder=None, record_events=False):
         geno = np.tile(self.wt_idx[None, :], (Ne, 1)) if founder is None \

@@ -45,49 +45,63 @@ class LineageRecorder:
         self.fix_thresh = fix_thresh
         self._seen: Dict[str, int] = {}              # hash → 首次出现代
         self._freq: Dict[int, Counter] = {}          # gen → {hash: count}
+        self._total_freq: Counter = Counter()        # hash → 累计个体数（父选择用）
         self._genos: Dict[str, np.ndarray] = {}      # hash → int8 行（重建谱系用）
         self._wt: Optional[np.ndarray] = None
         self.total_inds = 0
         self.total_unique_events = 0
-        self.fixations: List[dict] = []              # {gen, pop, muts}
-        self._prev_alleles: Dict[Tuple[int, int], Dict[int, set]] = {}
+        self.fixations: List[dict] = []              # {gen, pop, site, aa, freq}
+        self._fixed_state: Dict[Tuple[int, int], Optional[int]] = {}
+        self.EXIT_THRESH = 0.5                       # 固定态丢失迟滞线
 
     # ---------------------------------------------------------------- observer
-    def observe(self, gen: int, pops: np.ndarray, stats) -> None:
+    def observe(self, gen: int, pops: np.ndarray, stats=None) -> None:
         n_pop, Ne, L = pops.shape
-        if self._wt is None:
-            self._wt = None  # 由调用方 set_wt 提供; 无则固定判定退化为一致性判据
         cnt: Counter = Counter()
         for p in range(n_pop):
-            pop = pops[p]
-            keys = [_gkey(pop[i]) for i in range(Ne)]
-            cnt.update(keys)
-            self._record_fixations(gen, p, pop)
-            for i in range(Ne):
-                k = keys[i]
+            self._record_fixations(gen, p, pops[p])
+            uniq, counts = np.unique(pops[p], axis=0, return_counts=True)
+            keys = [_gkey(r) for r in uniq]
+            cnt.update(dict(zip(keys, map(int, counts))))
+            for k, row in zip(keys, uniq):
                 if k not in self._seen:
                     self._seen[k] = gen
-                    self._genos[k] = pop[i].copy()
+                    self._genos[k] = row.copy()
                     self.total_unique_events += 1
+            self.total_inds += Ne
         self._freq[gen] = cnt
-        self.total_inds += n_pop * Ne
+        self._total_freq.update(cnt)
 
     def set_wt(self, wt_idx: np.ndarray) -> None:
         self._wt = np.asarray(wt_idx, dtype=np.int8)
 
     def _record_fixations(self, gen: int, pop_id: int, pop: np.ndarray) -> None:
+        """带迟滞的固定事件记录（防阈值抖动反复计数）:
+        进入固定态需 freq ≥ fix_thresh; 退出需跌回 < exit(0.5);
+        固定态下换成别的等位 = 替换固定, 也算新事件。"""
+        n = len(pop)
         for j, site in enumerate(self.sites):
             col = pop[:, j]
             vals, counts = np.unique(col, return_counts=True)
-            for v, c in zip(vals, counts):
-                if c / len(col) >= self.fix_thresh and self._wt is not None \
-                        and int(v) != int(self._wt[j]):
-                    key = (pop_id, site, int(v))
-                    if key not in self._prev_alleles or gen not in self._prev_alleles[key]:
-                        self.fixations.append(dict(
-                            gen=gen, pop=pop_id, site=site,
-                            aa=AA20[int(v)], freq=round(float(c) / len(col), 3)))
-                        self._prev_alleles.setdefault(key, set()).add(gen)
+            freq = dict(zip(map(int, vals), (c / n for c in counts)))
+            key = (pop_id, site)
+            cur = self._fixed_state.get(key)
+            if self._wt is not None and int(self._wt[j]) in freq \
+                    and freq[int(self._wt[j])] >= self.fix_thresh:
+                cand = None                       # WT 重新占优 = 退回野生型
+            else:
+                cand = max((a for a, f in freq.items()
+                            if f >= self.fix_thresh and a != int(self._wt[j])),
+                           key=lambda a: freq[a], default=None)
+            if cand is not None:
+                if cand != cur:
+                    self.fixations.append(dict(
+                        gen=gen, pop=pop_id, site=site, aa=AA20[cand],
+                        freq=round(freq[cand], 3)))
+                    self._fixed_state[key] = cand
+            elif cur is not None and freq.get(cur, 0.0) < self.EXIT_THRESH:
+                self._fixed_state[key] = None     # 丢失（多态), 允许将来再记
+            # 其余情况（未固定且原本未固定 / 固定中但未跌破退出线）不动
 
     # ---------------------------------------------------------------- 派生量
     @property
@@ -101,25 +115,29 @@ class LineageRecorder:
         return sorted((g, sum(c.values())) for g, c in self._freq.items())
 
     def build_lineage(self) -> List[Tuple[int, str, Optional[str]]]:
-        """边表: (首次出现代, child_hash, parent_hash)。父 = 此前出现的编辑距离 1
-        基因型中（同代频率最高者）；无单步祖先（如迁移注入）则 parent=None。"""
-        order = sorted(self._seen.items(), key=lambda kv: kv[1])
-        known: List[Tuple[str, np.ndarray, int]] = []   # (hash, geno, first_gen)
+        """边表: (首次出现代, child_hash, parent_hash)。
+
+        父 = 已知基因型中与 child 编辑距离 1 的邻居（对每个位点枚举 19 个替换,
+        共 L×19 次哈希查表——O(N×L×19), 万级基因型可跑）中累计频率最高者;
+        无单步祖先（如迁移注入/WT 起点）则 parent=None。
+        """
+        index: Dict[Tuple[int, ...], str] = {}
         edges = []
-        for h, g in order:
+        for h, g in sorted(self._seen.items(), key=lambda kv: kv[1]):
             geno = self._genos[h]
-            parent = None
-            best = -1
-            for h2, g2, g2_gen in known:
-                if g2_gen >= g:
-                    continue
-                d = int((g2 != geno).sum())
-                if d == 1:
-                    freq = self._freq.get(g2_gen, Counter()).get(h2, 0)
-                    if freq > best:
-                        best, parent = freq, h2
+            t = tuple(int(x) for x in geno)
+            parent, best = None, -1
+            for j in range(len(t)):
+                for aa in range(20):
+                    if aa == t[j]:
+                        continue
+                    h2 = index.get(t[:j] + (aa,) + t[j + 1:])
+                    if h2 is not None:
+                        f = self._total_freq.get(h2, 0)
+                        if f > best:
+                            best, parent = f, h2
             edges.append((g, h, parent))
-            known.append((h, geno, g))
+            index[t] = h
         return edges
 
     # ---------------------------------------------------------------- 导出
