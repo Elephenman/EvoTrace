@@ -343,7 +343,7 @@ def main(substring="", force_lam=None):
    （漂移 {100*(d_sim.mean()-d_anc.mean())/d_anc.mean():+.1f}%）, 即尺度外推的
    realized 代价, 直接解释终跑均值掉落。
 3. **根因归因**: gap 膨胀已根除、均值从 b9 封顶 0.42 抬至 {d_sim.mean():.3f}、
-   熵秩 rho={rho:+.3f} 通过; 但分布形状（盲测 KS p={ks_der.pvalue:.3g}）与二阶
+   熵秩 rho={rho:+.3f}（{"通过" if rho > 0 else "未过"}）; 但分布形状（盲测 KS p={ks_der.pvalue:.3g}）与二阶
    配对相关（KS p={ks_pc.pvalue:.3g}）仍不过——与 b10"均匀 Potts 形状不过、需
    岛屿补空间结构"结论一致, 属**模型类能力边界而非调参**。
 另: 迁移率 m 在 λ 校准与 T 校准期被钉死为 0.005, m 的网格选择是在 λ/T 已冻结
