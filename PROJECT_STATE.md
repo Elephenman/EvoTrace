@@ -30,9 +30,10 @@ GB/PB 差 ~100 kcal 已确诊为模型系统偏差（indi=4 记账 + GB 核酸�
 | 设计蛋白资料库（MD/FoldX/AF3/论文，2026-09-07 自 A:\Data 整体迁入） | `设计蛋白/`（自身含独立 git 仓库，已加 .gitignore） |
 
 ## 下一步行动
-1. 湿实验执行 TrackF_F88W_M255A
-2. 可选加固：TrackF ΔG_spec 分块收敛分析（集群逐帧数据）；补测 WT_OFF；CHPC WT prod.nc 快照
-3. EvoTrace：按 evotrace_restore/ 路线图择机推进
+1. 湿实验执行 TrackF_F88W_M255A（执行包已就绪：wetlab/primers_sdm_v4 + CDS + ADDENDUM）
+2. ✅ 已完成（9/7）：TrackF ΔG_spec 收敛分析 → **+16.08 ± 4.10（3.9σ，自相关校正 N_eff≈10）**，图 c18；WT prod.nc 快照行动关闭（CHPC 副本已被清场，本地分析级数据完好）
+3. 待定（需确认）：补测 WT_OFF 150ns MD（消除 WT 代理基线假设）——4090D 实例 21114 SSH 无响应需先重启实例，或等 CHPC gpu 分区空闲；CD 由用户决定是否投入
+4. EvoTrace：按 evotrace_restore/ 路线图择机推进
 
 ## 长期约定
 - Boltz-2 任务免确认；其余 GPU 大批量须显式确认
