@@ -122,7 +122,8 @@ def island_wf(pm: PottsModel, pops0: np.ndarray, n_gen: int, T: float = 1.0,
               lam_mut: float = 0.3, m_mig: float = 0.0,
               rng: Optional[np.random.Generator] = None,
               observer=None,
-              proposal_states: Optional[np.ndarray] = None) -> np.ndarray:
+              proposal_states: Optional[np.ndarray] = None,
+              fitness_fn=None) -> np.ndarray:
     """岛屿 Wright-Fisher, 耦合提议。
 
     pops0: [n_pop, Ne, K] int8 初态（b9 口径: 祖先群体起步, 非 WT 种子）。
@@ -134,6 +135,9 @@ def island_wf(pm: PottsModel, pops0: np.ndarray, n_gen: int, T: float = 1.0,
     不是演化状态——传 np.arange(Q-1) 即 gap 不进变异字母表, 条件分布在
     允许集上重归一化; 概率质量全部落在禁止态的行回退为允许集均匀分布）。
     None = 全部 Q 态（原行为, 测试基线用）。
+    fitness_fn: 可选适应度函数 callable(states [Ne,K]) → [Ne]。None = pm.energy
+    （§4.9 诊断: plmDCA 能量与 gap 数相关 +0.94~0.99, 作为 WF 适应度会被
+    对齐伪迹劫持——对照变体见 b11 探针: 非 gap 能量 / 祖先对数先验）。
     """
     rng = rng or np.random.default_rng(0)
     if proposal_states is not None:
@@ -145,7 +149,7 @@ def island_wf(pm: PottsModel, pops0: np.ndarray, n_gen: int, T: float = 1.0,
         new = []
         for p in range(n_pop):
             x = pops[p]
-            e = pm.energy(x)
+            e = fitness_fn(x) if fitness_fn is not None else pm.energy(x)
             w = np.exp((e - e.max()) / T)
             w /= w.sum()
             par = rng.choice(Ne, size=Ne, p=w)
