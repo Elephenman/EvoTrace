@@ -61,14 +61,49 @@ T_GRID = [0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0]
 M_GRID = [0.0, 0.005, 0.02]
 
 
-def run_mean_dist(pm, anc21, T, m, n_gen=600, n_pop=2, ne=200, seed=SEED):
-    """短程岛屿 WF 的平衡均值距离（校准用）。"""
+def sample_pair_dists(mat, n_pairs, rng, max_factor=500):
+    """pair_distances 的守卫版（§4.9）: 样本对凑不满时显式失败, 不无限空转。"""
+    N = len(mat)
+    d, tries = [], 0
+    while len(d) < n_pairs:
+        tries += 1
+        if tries > max_factor * n_pairs:
+            raise RuntimeError("回放退化: 有效样本对（≥5 非掩码位点）凑不满——gap 膨胀守卫触发")
+        i, j = rng.integers(0, N, 2)
+        if i == j:
+            continue
+        a, b = mat[i], mat[j]
+        okk = (a != 31) & (b != 31)
+        if okk.sum() < 5:
+            continue
+        d.append(float((a[okk] != b[okk]).sum()) / okk.sum())
+    return np.array(d)
+
+
+def run_mean_dist(pm, anc21, T, m, n_gen=600, n_pop=2, ne=200, seed=SEED,
+                  proposal_states=None):
+    """短程岛屿 WF 的平衡均值距离（校准用, §4.9 加退化守卫）。
+    返回 float；回放退化（<50% 随机样本对有效, 即 gap 汤信号）→ None。"""
     rng = np.random.default_rng(seed)
     pops0 = anc21[rng.integers(0, len(anc21), n_pop * ne)].reshape(n_pop, ne, -1)
-    end = island_wf(pm, pops0, n_gen=n_gen, T=T, lam_mut=LAM_MUT, m_mig=m, rng=rng)
-    d = pair_distances(to_masked(end.reshape(-1, end.shape[-1])), 400,
-                       np.random.default_rng(seed))
-    return float(d.mean())
+    end = island_wf(pm, pops0, n_gen=n_gen, T=T, lam_mut=LAM_MUT, m_mig=m,
+                    rng=rng, proposal_states=proposal_states)
+    msk = to_masked(end.reshape(-1, end.shape[-1]))
+    r3 = np.random.default_rng(seed + 1)
+    vals, nok = [], 0
+    for _ in range(400):
+        i, j = r3.integers(0, len(msk), 2)
+        if i == j:
+            continue
+        a, b = msk[i], msk[j]
+        okk = (a != 31) & (b != 31)
+        if okk.sum() < 5:
+            continue
+        nok += 1
+        vals.append(float((a[okk] != b[okk]).sum()) / okk.sum())
+    if nok < 200:                       # 退化守卫: 有效样本对 <50%
+        return None
+    return float(np.mean(vals))
 
 
 def pair_support(mat, min_obs=10):
@@ -147,53 +182,49 @@ def main(substring="", force_lam=None):
     d_der = pair_distances(der, PAIRS, rng)
     target = float(d_anc.mean())
 
-    # ---- λ 训练侧校准（P1-1, 铁律: 只用祖先半 anc21）----
+    # ---- λ×T 联合校准（§4.9 协议修正: gap 膨胀诊断后, "先 λ 后 T"改为联合网格;
+    #      gap 不进变异字母表; 全程祖先侧, 盲测零泄漏）----
+    prop_states = np.arange(Q - 1)          # 20 种氨基酸, gap(20) 不可被变异产生
+    pm_by_lam = {}
+    cands = []
     if force_lam is not None:
-        best_lam = float(force_lam)
-        print(f"[3] λ 校准: 跳过网格, 强制 λ={best_lam}", flush=True)
-        Wfull = fit_plm(anc21, Q=Q, epochs=EPOCHS, lam=best_lam, lr=LR,
-                        seed=SEED, verbose=True)
-        pm = PottsModel(Wfull, eps=EPS_SPARSE, Q=Q)
-        lam_calib = [dict(lam=best_lam, replay_mean=round(
-            run_mean_dist(pm, anc21, T_REF, m=0.005), 3))]
+        lam_list = [float(force_lam)]
+        print(f"[3] 联合校准: 强制 λ={force_lam}, 仅扫 T", flush=True)
     else:
-        print(f"[3] λ 校准（网格 {LAM_GRID}, 参考 T={T_REF}, 目标均值 {target:.3f}）",
-              flush=True)
-        cand = {}
-        for lam in LAM_GRID:
-            Wfull_l = fit_plm(anc21, Q=Q, epochs=EPOCHS, lam=lam, lr=LR,
-                              seed=SEED, verbose=False)
-            pm_l = PottsModel(Wfull_l, eps=EPS_SPARSE, Q=Q)
-            d = run_mean_dist(pm_l, anc21, T_REF, m=0.005)
-            cand[lam] = (pm_l, d)
-            print(f"    λ={lam:5.2f} → 回放均值 {d:.3f}（err {abs(d-target):.3f}）",
-                  flush=True)
-        best_lam = min(LAM_GRID, key=lambda l: abs(cand[l][1] - target))
-        pm = cand[best_lam][0]
-        lam_calib = [dict(lam=float(l), replay_mean=round(cand[l][1], 3))
-                     for l in LAM_GRID]
-        print(f"    冻结 λ = {best_lam}（回放均值 {cand[best_lam][1]:.3f} ≈ 目标 "
-              f"{target:.3f}）", flush=True)
+        lam_list = list(LAM_GRID)
+        print(f"[3] λ×T 联合校准（λ∈{LAM_GRID} × T∈{T_GRID}, 目标均值 {target:.3f}, "
+              f"gap 不进变异字母表 §4.9）", flush=True)
+    for lam in lam_list:
+        Wfull_l = fit_plm(anc21, Q=Q, epochs=EPOCHS, lam=lam, lr=LR,
+                          seed=SEED, verbose=False)
+        pm_l = PottsModel(Wfull_l, eps=EPS_SPARSE, Q=Q)
+        pm_by_lam[lam] = pm_l
+        for T in T_GRID:
+            r = run_mean_dist(pm_l, anc21, T=T, m=0.005, proposal_states=prop_states)
+            tag = "退化回放（守卫触发）" if r is None else f"均值 {r:.3f}"
+            print(f"    λ={lam:5.2f} T={T:5.2f} → {tag}", flush=True)
+            if r is not None:
+                cands.append((abs(r - target), lam, T, r))
+    if not cands:
+        print("全部 (λ,T) 组合回放退化——需上探 T_GRID 或重审协议（§4.9）",
+              file=sys.stderr)
+        return 3
+    _, best_lam, chosen_T, best_r = min(cands, key=lambda t: (t[0], t[1], t[2]))
+    pm = pm_by_lam[best_lam]
+    lam_calib = [dict(lam=float(l), T=float(T), replay_mean=round(r, 3))
+                 for _, l, T, r in cands]
     LAM_REG = best_lam
+    print(f"    冻结 λ={best_lam}, T*={chosen_T}（回放均值 {best_r:.3f} ≈ 目标 "
+          f"{target:.3f}）", flush=True)
     print(f"    稀疏耦合对 {len(pm.J)}/{K*(K-1)//2}", flush=True)
-
-    # ---- T 校准（祖先侧均值）----
-    print(f"[4] T 校准: 目标均值 {target:.3f}", flush=True)
-    chosen_T = T_GRID[-1]
-    for T in T_GRID:
-        d = run_mean_dist(pm, anc21, T, m=0.005)
-        print(f"    T={T:5.2f} → 均值 {d:.3f}", flush=True)
-        if d >= target:
-            chosen_T = T
-            break
-    print(f"    选定 T = {chosen_T}", flush=True)
 
     # ---- m 选择（祖先侧形状 KS, 防盲测泄漏）----
     best_m, best_p = M_GRID[0], -1.0
     for m in M_GRID:
         end = island_wf(pm, anc21[rng.integers(0, len(anc21), 4 * 250)].reshape(4, 250, K),
-                        n_gen=800, T=chosen_T, lam_mut=LAM_MUT, m_mig=m, rng=rng)
-        d_sim = pair_distances(to_masked(end.reshape(-1, K)), 1000, rng)
+                        n_gen=800, T=chosen_T, lam_mut=LAM_MUT, m_mig=m, rng=rng,
+                        proposal_states=prop_states)
+        d_sim = sample_pair_dists(to_masked(end.reshape(-1, K)), 1000, rng)
         p = float(ks_2samp(d_sim, d_anc).pvalue)
         print(f"    m={m:5.3f} → 组内 KS p={p:.3f}（均值 {d_sim.mean():.3f}）", flush=True)
         if p > best_p:
@@ -203,12 +234,12 @@ def main(substring="", force_lam=None):
     # ---- 终跑（b9 规模）----
     pops0 = anc21[rng.integers(0, len(anc21), N_POP * NE)].reshape(N_POP, NE, K)
     end = island_wf(pm, pops0, n_gen=N_GEN, T=chosen_T, lam_mut=LAM_MUT,
-                    m_mig=best_m, rng=rng)
+                    m_mig=best_m, rng=rng, proposal_states=prop_states)
     sim = to_masked(end.reshape(-1, K))
     print(f"[5] 终跑完成（{time.time()-t0:.0f}s）", flush=True)
 
     # ---- 比对（b9 口径 + P1-2 二阶统计）----
-    d_sim = pair_distances(sim, PAIRS, rng)
+    d_sim = sample_pair_dists(sim, PAIRS, rng)
     ks_in = ks_2samp(d_sim, d_anc)
     ks_der = ks_2samp(d_sim, d_der)
     rho = float(spearmanr(site_entropy(sim), site_entropy(der)).statistic)
@@ -241,10 +272,13 @@ def main(substring="", force_lam=None):
 
 - 家族: `{name}`（{len(seqs)} 序列, {K} 位点; 训练 = ancestral 半子样 {len(anc21)}）
 - 引擎: engine.potts（v2 Adam）+ 岛屿 WF（{N_POP} 群, 终跑 {N_GEN} 代 × Ne={NE}）
-- 校准（全部在祖先侧, 盲测零泄漏）: T={chosen_T}（均值目标 {target:.3f}）,
+- 校准（全部在祖先侧, 盲测零泄漏）: **λ×T 联合网格**（§4.9）→ λ={LAM_REG},
+  T={chosen_T}（回放均值 {best_r:.3f} ≈ 祖先实测目标 {target:.3f}）,
   m={best_m}（组内 KS p={best_p:.3f}）; λ_mut={LAM_MUT}, 稀疏耦合对 {len(pm.J)}
-- λ 训练侧校准（P1-1）: 冻结 λ={LAM_REG}（网格 {LAM_GRID}, 参考 T={T_REF},
-  目标均值 {target:.3f}）
+- §4.9 协议修正（gap 膨胀诊断 2026-09-07）: gap 不进变异字母表
+  （条件分布在 20 AA 上重归一化, 祖先既有 gap 保留）; 全部 (λ,T) 组合
+  先过退化守卫（<50% 样本对有效即剔除）——原"先 λ 后 T"在 T_REF=1.0 下
+  第 1 代即 gap 固定（gap 占比 12.7%→99.99%）, 判决不可能产出。
 - 墙钟: {time.time()-t0:.0f}s | seed {SEED}
 
 ## 判决: **{verdict}**（v1 标准: 盲测 KS p>0.05 且 熵 rho>0 且 二阶配对相关 KS p>0.05）

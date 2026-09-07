@@ -121,7 +121,8 @@ class PottsModel:
 def island_wf(pm: PottsModel, pops0: np.ndarray, n_gen: int, T: float = 1.0,
               lam_mut: float = 0.3, m_mig: float = 0.0,
               rng: Optional[np.random.Generator] = None,
-              observer=None) -> np.ndarray:
+              observer=None,
+              proposal_states: Optional[np.ndarray] = None) -> np.ndarray:
     """岛屿 Wright-Fisher, 耦合提议。
 
     pops0: [n_pop, Ne, K] int8 初态（b9 口径: 祖先群体起步, 非 WT 种子）。
@@ -129,8 +130,14 @@ def island_wf(pm: PottsModel, pops0: np.ndarray, n_gen: int, T: float = 1.0,
     按条件分布重抽（同个体多位点顺序条件化）→ 迁移（每岛替换 ⌊m·Ne⌋ 个体
     为随机供体岛个体拷贝）。返回终态 pops [n_pop, Ne, K]。
     observer(gen, pops, stats) 可选。
+    proposal_states: 允许被变异重抽的状态索引（提案 §4.9: gap 是比对伪迹,
+    不是演化状态——传 np.arange(Q-1) 即 gap 不进变异字母表, 条件分布在
+    允许集上重归一化; 概率质量全部落在禁止态的行回退为允许集均匀分布）。
+    None = 全部 Q 态（原行为, 测试基线用）。
     """
     rng = rng or np.random.default_rng(0)
+    if proposal_states is not None:
+        proposal_states = np.asarray(proposal_states, dtype=np.int64)
     pops = np.array(pops0, dtype=np.int64)
     n_pop, Ne, K = pops.shape
     for g in range(n_gen):
@@ -154,6 +161,18 @@ def island_wf(pm: PottsModel, pops0: np.ndarray, n_gen: int, T: float = 1.0,
                 for s, idxs in by_site.items():
                     ctx = children[np.array(idxs)]
                     P = pm.conditional(ctx, s)
+                    if proposal_states is not None:
+                        allow = np.zeros(pm.Q, dtype=np.float64)
+                        allow[proposal_states] = 1.0
+                        P = P * allow[None, :]
+                        ssum = P.sum(axis=1)
+                        dead = ssum < 1e-12
+                        if dead.any():
+                            P[dead] = 0.0
+                            P[np.flatnonzero(dead)[:, None], proposal_states] = \
+                                1.0 / len(proposal_states)
+                            ssum = P.sum(axis=1)
+                        P = P / ssum[:, None]
                     cum = np.cumsum(P, axis=1)
                     u = rng.random((len(idxs), 1))
                     draw = (u > cum).sum(axis=1).clip(0, pm.Q - 1)
