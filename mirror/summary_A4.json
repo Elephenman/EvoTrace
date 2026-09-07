@@ -1,0 +1,419 @@
+{
+ "family": "A4_HUMAN_2023-08-07_b01.a2m",
+ "K": 48,
+ "fam_tag": "A4",
+ "lam_reg": 0.2,
+ "fitness": "logprior(§4.10)",
+ "lam_mut": 12.0,
+ "calib_table": [
+  {
+   "lam": 0.01,
+   "lam_mut": 0.3,
+   "T": 9.197,
+   "replay_mean": 0.05
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 0.3,
+   "T": 18.394,
+   "replay_mean": 0.066
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 0.3,
+   "T": 36.788,
+   "replay_mean": 0.09
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 0.3,
+   "T": 73.575,
+   "replay_mean": 0.014
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 2.0,
+   "T": 9.197,
+   "replay_mean": 0.099
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 2.0,
+   "T": 18.394,
+   "replay_mean": 0.111
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 2.0,
+   "T": 36.788,
+   "replay_mean": 0.036
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 2.0,
+   "T": 73.575,
+   "replay_mean": 0.056
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 6.0,
+   "T": 9.197,
+   "replay_mean": 0.042
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 6.0,
+   "T": 18.394,
+   "replay_mean": 0.055
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 6.0,
+   "T": 36.788,
+   "replay_mean": 0.041
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 6.0,
+   "T": 73.575,
+   "replay_mean": 0.056
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 12.0,
+   "T": 9.197,
+   "replay_mean": 0.038
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 12.0,
+   "T": 18.394,
+   "replay_mean": 0.053
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 12.0,
+   "T": 36.788,
+   "replay_mean": 0.055
+  },
+  {
+   "lam": 0.01,
+   "lam_mut": 12.0,
+   "T": 73.575,
+   "replay_mean": 0.076
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 0.3,
+   "T": 9.197,
+   "replay_mean": 0.078
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 0.3,
+   "T": 18.394,
+   "replay_mean": 0.129
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 0.3,
+   "T": 36.788,
+   "replay_mean": 0.103
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 0.3,
+   "T": 73.575,
+   "replay_mean": 0.137
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 2.0,
+   "T": 9.197,
+   "replay_mean": 0.172
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 2.0,
+   "T": 18.394,
+   "replay_mean": 0.183
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 2.0,
+   "T": 36.788,
+   "replay_mean": 0.148
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 2.0,
+   "T": 73.575,
+   "replay_mean": 0.194
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 6.0,
+   "T": 9.197,
+   "replay_mean": 0.182
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 6.0,
+   "T": 18.394,
+   "replay_mean": 0.15
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 6.0,
+   "T": 36.788,
+   "replay_mean": 0.164
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 6.0,
+   "T": 73.575,
+   "replay_mean": 0.212
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 12.0,
+   "T": 9.197,
+   "replay_mean": 0.161
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 12.0,
+   "T": 18.394,
+   "replay_mean": 0.187
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 12.0,
+   "T": 36.788,
+   "replay_mean": 0.214
+  },
+  {
+   "lam": 0.05,
+   "lam_mut": 12.0,
+   "T": 73.575,
+   "replay_mean": 0.257
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 0.3,
+   "T": 9.197,
+   "replay_mean": 0.163
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 0.3,
+   "T": 18.394,
+   "replay_mean": 0.105
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 0.3,
+   "T": 36.788,
+   "replay_mean": 0.113
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 0.3,
+   "T": 73.575,
+   "replay_mean": 0.17
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 2.0,
+   "T": 9.197,
+   "replay_mean": 0.187
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 2.0,
+   "T": 18.394,
+   "replay_mean": 0.217
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 2.0,
+   "T": 36.788,
+   "replay_mean": 0.226
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 2.0,
+   "T": 73.575,
+   "replay_mean": 0.257
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 6.0,
+   "T": 9.197,
+   "replay_mean": 0.226
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 6.0,
+   "T": 18.394,
+   "replay_mean": 0.221
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 6.0,
+   "T": 36.788,
+   "replay_mean": 0.293
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 6.0,
+   "T": 73.575,
+   "replay_mean": 0.352
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 12.0,
+   "T": 9.197,
+   "replay_mean": 0.268
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 12.0,
+   "T": 18.394,
+   "replay_mean": 0.303
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 12.0,
+   "T": 36.788,
+   "replay_mean": 0.354
+  },
+  {
+   "lam": 0.1,
+   "lam_mut": 12.0,
+   "T": 73.575,
+   "replay_mean": 0.414
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 0.3,
+   "T": 9.197,
+   "replay_mean": 0.181
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 0.3,
+   "T": 18.394,
+   "replay_mean": 0.137
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 0.3,
+   "T": 36.788,
+   "replay_mean": 0.157
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 0.3,
+   "T": 73.575,
+   "replay_mean": 0.175
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 2.0,
+   "T": 9.197,
+   "replay_mean": 0.209
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 2.0,
+   "T": 18.394,
+   "replay_mean": 0.25
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 2.0,
+   "T": 36.788,
+   "replay_mean": 0.299
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 2.0,
+   "T": 73.575,
+   "replay_mean": 0.386
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 6.0,
+   "T": 9.197,
+   "replay_mean": 0.281
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 6.0,
+   "T": 18.394,
+   "replay_mean": 0.334
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 6.0,
+   "T": 36.788,
+   "replay_mean": 0.404
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 6.0,
+   "T": 73.575,
+   "replay_mean": 0.51
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 12.0,
+   "T": 9.197,
+   "replay_mean": 0.373
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 12.0,
+   "T": 18.394,
+   "replay_mean": 0.457
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 12.0,
+   "T": 36.788,
+   "replay_mean": 0.502
+  },
+  {
+   "lam": 0.2,
+   "lam_mut": 12.0,
+   "T": 73.575,
+   "replay_mean": 0.68
+  }
+ ],
+ "T": 73.575,
+ "m": 0.0,
+ "m_select_p": 9.505609194211971e-30,
+ "n_sparse_pairs": 1128,
+ "d_sim": 0.771,
+ "d_anc": 0.825,
+ "d_der": 0.884,
+ "ks_in": {
+  "D": 0.43,
+  "p": 2.4378878484531503e-166
+ },
+ "ks_der": {
+  "D": 0.549,
+  "p": 3.406962941927945e-277
+ },
+ "entropy_rho": 0.0821754233608337,
+ "ks_paircorr": {
+  "D": 0.1453900709219858,
+  "p": 8.195367069546164e-11
+ },
+ "pc_sim_mean": 0.0115,
+ "pc_der_mean": 0.0122,
+ "verdict": "REVIEW",
+ "seed": 20260906,
+ "wall_s": 2014.3
+}

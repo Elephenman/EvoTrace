@@ -31,3 +31,7 @@ __pycache__/
 *.pt
 *.bin
 evo2/results/b8_longrun/landscape_cache.db
+
+# 设计蛋白资料库（个人数据整体迁入 2026-09-07，含独立 git 仓库，不入 EvoTrace 主仓库）
+/设计蛋白/
+/_archive/
