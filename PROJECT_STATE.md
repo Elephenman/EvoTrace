@@ -32,7 +32,7 @@ GB/PB 差 ~100 kcal 已确诊为模型系统偏差（indi=4 记账 + GB 核酸�
 
 ## 下一步行动
 1. 待用户确认后执行 TrackF_r1::K88W/M255A 湿实验（执行包已就绪但尚未执行；旧文件名保留作迁移外键）
-2. ✅ 已完成（9/7）：TrackF ΔG_spec 收敛分析 → **+16.08 ± 4.10（3.9σ，自相关校正 N_eff≈10）**，图 c18；WT prod.nc 快照行动关闭（CHPC 副本已被清场，本地分析级数据完好）
+2. ✅ 已完成（9/7 收敛分析；9/9 凌晨-上午）：TrackF ΔG_spec 收敛分析（±4.10/3.9σ, 图 c18）→ **MD 结构检视**（8 体系 start/150ns 端点 PDB + PyMOL 12 图；s13 S1 臂 DNA 完全解离/TrackF 锚点合拢，报告 `md_specificity/structure_views/`）→ **MD 数据归档**（`设计蛋白/MD数据归档_20260909/`，7.57GB/471 文件零差异，含归档清单）；WT prod.nc 快照行动关闭（CHPC 副本已被清场）；全局 MemoryGate hook 中文路径编码 bug 已修复（三层：UTF8 解码/乱码自愈/优雅降级）
 3. 待定（需确认）：补测 WT_OFF 150ns MD（消除 WT 代理基线假设）——4090D 实例 21114 SSH 无响应需先重启实例，或等 CHPC gpu 分区空闲；CD 由用户决定是否投入
 4. EvoTrace：按 evotrace_restore/ 路线图择机推进
 
